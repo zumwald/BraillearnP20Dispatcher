@@ -1,0 +1,27 @@
+# FIXED
+
+uart_echo.obj: ../uart_echo.c
+uart_echo.obj: E:/StellarisWare/inc/hw_ints.h
+uart_echo.obj: E:/StellarisWare/inc/hw_memmap.h
+uart_echo.obj: E:/StellarisWare/inc/hw_types.h
+uart_echo.obj: E:/StellarisWare/driverlib/debug.h
+uart_echo.obj: E:/StellarisWare/driverlib/fpu.h
+uart_echo.obj: E:/StellarisWare/driverlib/gpio.h
+uart_echo.obj: E:/StellarisWare/driverlib/pin_map.h
+uart_echo.obj: E:/StellarisWare/driverlib/interrupt.h
+uart_echo.obj: E:/StellarisWare/driverlib/rom.h
+uart_echo.obj: E:/StellarisWare/driverlib/sysctl.h
+uart_echo.obj: E:/StellarisWare/driverlib/uart.h
+
+../uart_echo.c: 
+E:/StellarisWare/inc/hw_ints.h: 
+E:/StellarisWare/inc/hw_memmap.h: 
+E:/StellarisWare/inc/hw_types.h: 
+E:/StellarisWare/driverlib/debug.h: 
+E:/StellarisWare/driverlib/fpu.h: 
+E:/StellarisWare/driverlib/gpio.h: 
+E:/StellarisWare/driverlib/pin_map.h: 
+E:/StellarisWare/driverlib/interrupt.h: 
+E:/StellarisWare/driverlib/rom.h: 
+E:/StellarisWare/driverlib/sysctl.h: 
+E:/StellarisWare/driverlib/uart.h: 
