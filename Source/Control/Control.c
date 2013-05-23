@@ -21,6 +21,7 @@ typedef enum {
 typedef enum {
 	rREAD, rSELECT
 } READSTATES;
+#define 	BUFFERSIZE	16
 
 /********************************************************************
  * Public Resources
@@ -51,8 +52,19 @@ void CntlInit(void) {
 void CntlTask(void) {
 	INT8U key, cntlFlag;
 	INT16U rawKey;
+	static INT8U readBuffer[BUFFERSIZE];
+	static INT8U sendBuffer[BUFFERSIZE];
+	INT8U* rBptr = readBuffer;
+	INT8U* sBptr = sendBuffer;
 
 	key = GetKey(&cntlFlag, &rawKey);
+
+	if (key) {
+		UARTSend("Key: ", (INT32U) 5);
+		UARTSend(&key, (INT32U) 1);
+		UARTSend("\r\n",(INT32U)2);
+	} else {
+	}
 
 	switch (progState) {
 	/*		Menu State			*/
@@ -63,19 +75,23 @@ void CntlTask(void) {
 		case 'N':
 			progState = NOTES;
 			noteState = nSELECT;
+			UARTSend("\r\nNotes", (INT32U) 7);
 			break;
 		case 'r':
 		case 'R':
 			progState = READ;
 			readState = rSELECT;
+			UARTSend("\r\nRead", (INT32U) 6);
 			break;
 		case 'l':
 		case 'L':
 			progState = LEARN;
+			UARTSend("\r\nLearn", (INT32U) 7);
 			break;
 		case 'c':
 		case 'C':
 			progState = CHAT;
+			UARTSend("\r\nChat", (INT32U) 6);
 			break;
 		default:
 			//	Display Menu Message
@@ -121,10 +137,12 @@ void CntlTask(void) {
 			case 'n':
 			case 'N':
 				noteState = nNEW;
+				UARTSend("\r\nNew Note", (INT32U) 10);
 				break;
 			case 'o':
 			case 'O':
 				noteState = nOLD;
+				UARTSend("\r\nOld Note", (INT32U) 10);
 				break;
 			default:
 				if (cntlFlag && (key == 'M')) {
@@ -225,7 +243,19 @@ void CntlTask(void) {
 		/*		Chat State			*/
 	case CHAT:
 		if (!cntlFlag && (key != 'M')) {
-			//	Chat(key,rawKey);
+			/*	Get Chat message	*/
+			UARTGetBuffer(readBuffer);
+			if (*readBuffer != 0x00) {
+				//	TODO display buffer
+			} else {
+			}
+
+			/*	Send user key	*/
+			if (!cntlFlag || key == ' ') {
+				UARTSendChar(key);
+			} else {
+				//	TODO respond to nav key
+			}
 		} else {
 			progState = MENU;
 			bMenuDisplayed = FALSE;

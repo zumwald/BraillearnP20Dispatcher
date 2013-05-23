@@ -14,6 +14,11 @@
 extern void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
 
 //*****************************************************************************
+// Send a char to the UART.	-	Public, Non-blocking
+//*****************************************************************************
+extern void UARTSendChar(INT8U ch);
+
+//*****************************************************************************
 // The UART interrupt handler.	- local echo
 //*****************************************************************************
 void UARTIntHandler(void);
@@ -32,5 +37,10 @@ void UARTGetBuffer(INT8U *buffer);
 // Send the welcome string to the UART.	-	Public, BLOCKING 30mS
 //*****************************************************************************
 void UART_Welcome(void);
+
+/********************************************************************
+* KeyTask() - The main UART send/receive task
+********************************************************************/
+extern void UARTTask(void);
 
 #endif /* UART_H_ */

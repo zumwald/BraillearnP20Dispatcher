@@ -47,22 +47,6 @@ typedef signed long     INT32S;
 #include "driverlib/rom.h"
 #include "driverlib/uart.h"
 
-#include "inc/hw_ints.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "driverlib/debug.h"
-#include "driverlib/fpu.h"
-#include "driverlib/gpio.h"
-#include "driverlib/interrupt.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/rom.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/uart.h"
-
-#define  SWI()          asm swi;
-#define  ENABLE_INT()   asm cli;
-#define  DISABLE_INT()  asm sei;
-
 /*************************************************************************
 * Project Constant and Macro Definitions
 *************************************************************************/
@@ -87,6 +71,13 @@ typedef signed long     INT32S;
 #define DB_UART         BIT4
 #define DB_KEY          BIT5
 
+#define KEY_SPACE 	0x00008000
+#define KEY_LEFT  	0x00002000
+#define KEY_RIGHT 	0x00004000
+#define KEYBITS		0xFF
+#define NAVBITS		(BIT5|BIT6|BIT7)
+#define KEYPORT_BASE	GPIO_PORTB_BASE
+#define NAVPORT_BASE	GPIO_PORTC_BASE
 /*************************************************************************
 * System Header Files 
 *************************************************************************/

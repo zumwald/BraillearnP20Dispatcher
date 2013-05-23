@@ -24,6 +24,7 @@ volatile INT8U tickFlag = 0x00;
 ********************************************************************/
 int main(void) {
 	INT32U ulPeriod;
+	INT8U  keyOn = TRUE;
 
 	/*	Initialize System Clock	*/
 	SysCtlClockSet(
@@ -72,8 +73,12 @@ int main(void) {
 #if defined(DB_SLICE) && defined(DB_PORT)
     GPIOPinWrite(DB_PORT, DB_SLICE, DB_SLICE);
 #endif
+    if(keyOn){
 		KeyTask();
+    }else{}
 		CntlTask();
+		UARTTask();
+		keyOn ^= TRUE;
 	}
 }
 

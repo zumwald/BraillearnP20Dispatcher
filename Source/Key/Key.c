@@ -26,9 +26,6 @@
 * Module Defines
 ********************************************************************/
 typedef enum{KEY_OFF,KEY_EDGE,KEY_VERF} KEYSTATES;
-#define KEY_SPACE 0x00008000
-#define KEY_LEFT  0x00002000
-#define KEY_RIGHT 0x00004000
 
 /********************************************************************
 * Public Resources
@@ -105,7 +102,7 @@ INT8U GetKey(INT8U *cntlFlag, INT16U *rawKey){
 ********************************************************************/
 INT8U IsCntlKey(INT16U key){
 
-	if (key & (KEY_LEFT|KEY_RIGHT)){
+	if ((key & KEY_LEFT) && (key & KEY_RIGHT)){
 		return 'M';	//	menu control
 	}else if (key & KEY_LEFT){
 		return '<';
@@ -130,8 +127,10 @@ void KeyInit(void){
 	/*	Configure Keyboard GPIO ports as Inputs	*/
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
-	GPIOPinTypeGPIOInput(GPIO_PORTB_BASE,GPIO_ALL);
-	GPIOPinTypeGPIOInput(GPIO_PORTC_BASE,BIT5|BIT6|BIT7);
+	GPIOPinTypeGPIOInput(KEYPORT_BASE,GPIO_ALL);
+	GPIOPinTypeGPIOInput(NAVPORT_BASE,BIT5|BIT6|BIT7);
+	GPIOPadConfigSet(KEYPORT_BASE,KEYBITS,GPIO_STRENGTH_2MA,GPIO_PIN_TYPE_STD_WPU);
+	GPIOPadConfigSet(NAVPORT_BASE,NAVBITS,GPIO_STRENGTH_2MA,GPIO_PIN_TYPE_STD_WPU);
     KeyBuffer = 0;           /* Init KeyBuffer      */
 }
 
@@ -190,14 +189,20 @@ void KeyTask(void) {
 ********************************************************************/
 static INT16U KeyScan(void) {
 
-	INT32S keyboard = 0, navkeys = 0;
+	volatile INT8U keyboard = 0, navkeys = 0;
+	volatile INT16U returnval = 0;
 
-	keyboard = GPIOPinRead(GPIO_PORTB_BASE,GPIO_ALL);
-	navkeys  = GPIOPinRead(GPIO_PORTC_BASE,BIT5|BIT6|BIT7);
+	keyboard = (INT8U)GPIOPinRead(GPIO_PORTB_BASE,KEYBITS);
+	keyboard ^= KEYBITS;
+	navkeys  = (INT8U)GPIOPinRead(GPIO_PORTC_BASE,NAVBITS);
+	navkeys = navkeys ^ NAVBITS;
 	if (navkeys != 0){
-		return ((INT16U)navkeys)<<8;
+		returnval = (INT16U)navkeys;
+		returnval = returnval << 8;	// shift to next byte
+		return returnval;
 	}else{
-		return (INT16U)keyboard;
+		returnval = (INT16U)keyboard;
+		return returnval;
 	}
 }
 /********************************************************************/
