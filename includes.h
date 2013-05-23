@@ -79,6 +79,8 @@ typedef signed long     INT32S;
 #define CR				0x0A
 #define LF				0x0D
 
+#define CRYSTAL_16MHZ (INT32U)16000000
+
 #define SLICE_PER 10
 #define DB_PORT			GPIO_PORTE_BASE
 #define DB_SLICE        BIT3

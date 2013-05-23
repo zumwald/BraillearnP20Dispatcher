@@ -1,9 +1,27 @@
+/*
+ * Main.c
+ *
+ *  Created on: May 19, 2013
+ *      Author: Dan Zumwalt
+ */
+/********************************************************************
+* Project master header file
+********************************************************************/
 #include "includes.h"
 
+/********************************************************************
+* Module Defines
+********************************************************************/
 #define IDLE() while(!tickFlag);tickFlag=0
 
+/********************************************************************
+* Private Resources
+********************************************************************/
 volatile INT8U tickFlag = 0x00;
 
+/********************************************************************
+* Main() - System initialization routine and Timeslice Kernel.
+********************************************************************/
 int main(void) {
 	INT32U ulPeriod;
 
@@ -20,13 +38,14 @@ int main(void) {
 	/*	Initialize GPIO States	*/
 	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE,
 			GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+
 	/*	Initialize Bit Toggles	*/
 	GPIOPinTypeGPIOOutput(DB_PORT,DB_KEY|DB_UART|DB_SLICE);
 	GPIOPinWrite(DB_PORT,DB_KEY|DB_UART|DB_SLICE,DB_KEY|DB_UART|DB_SLICE);
 
 	/*	Initialize Timer Module	*/
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER);
-	ulPeriod = 2500000; //ulPeriod = (SysCtlClockGet() / 10) / 2;
+	ulPeriod = 250000; //ulPeriod = (SysCtlClockGet() / 10) / 2;
 	TimerLoadSet(TIMER0_BASE, TIMER_A, ulPeriod - 1);
 	IntEnable(INT_TIMER0A);		// Enable timer interrupt
 	TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
@@ -38,6 +57,9 @@ int main(void) {
 	KeyInit();
 	CntlInit();
 	UARTInit();
+
+	/*	Send welcome message	*/
+	UART_Welcome();
 
 	/*	Start Timeslice timer	*/
 	TimerEnable(TIMER0_BASE, TIMER_A);
@@ -55,6 +77,9 @@ int main(void) {
 	}
 }
 
+/********************************************************************
+* Timer ISR - Generated on Timer0 tick, posts tickFlag for IDLE()
+********************************************************************/
 void Timer0IntHandler(void) {
 	// Clear the timer interrupt
 	TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);

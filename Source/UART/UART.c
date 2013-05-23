@@ -1,6 +1,6 @@
 /*
  * UART.c
- *
+ *	Modifed ~~ See Below.
  *  Created on: May 22, 2013
  *      Author: zumwald
  */
@@ -31,35 +31,30 @@
 //
 //*****************************************************************************
 
+/********************************************************************
+* Project master header file
+********************************************************************/
 #include "includes.h"
 
-#define BAUD	9600
+/********************************************************************
+* Module Defines
+********************************************************************/
+#define BAUD	115200
 
+/********************************************************************
+* Public Resources
+********************************************************************/
 void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
-//*****************************************************************************
-//
-//! \addtogroup example_list
-//! <h1>UART Echo (uart_echo)</h1>
-//!
-//! This example application utilizes the UART to echo text.  The first UART
-//! (connected to the USB debug virtual serial port on the evaluation board)
-//! will be configured in 115,200 baud, 8-n-1 mode.  All characters received on
-//! the UART are transmitted back to the UART.
-//
-//*****************************************************************************
 
-
-//*****************************************************************************
-//
-// The error routine that is called if the driver library encounters an error.
-//
-//*****************************************************************************
-#ifdef DEBUG
-void
-__error__(char *pcFilename, unsigned long ulLine)
-{
-}
-#endif
+/********************************************************************
+* Private Resources
+********************************************************************/
+const INT8U menuStr[36][10] = {"\r _       ","        _ ","_ _      _","_____     ","     _____","  _   _ \r\n",
+						   "\r| |      ","       (_)"," | |    | "," ____|   /","\\   |  __ ","\\| \\ | |\r\n",
+						   "\r| |__  _ ","__ __ _ _|"," | |    | ","|__     / "," \\  | |__)"," |  \\| |\r\n",
+						   "\r| '_ \\| '","__/ _` | |"," | |    | "," __|   / /","\\ \\ |  _  ","/| . ` |\r\n",
+						   "\r| |_) | |"," | (_| | |"," | |____| ","|____ / __","__ \\| | \\ ","\\| |\\  |\r\n",
+						   "\r|_.__/|_|","  \\__,_|_|","_|______|_","_____/_/  ","  \\_\\_|  \\","_\\_| \\_|\r\n"};
 
 //*****************************************************************************
 //
@@ -71,49 +66,24 @@ UARTIntHandler(void)
 {
     unsigned long ulStatus;
 
-    //
-    // Get the interrrupt status.
-    //
+    // Get the interrupt status.
     ulStatus = ROM_UARTIntStatus(UART0_BASE, true);
 
-    //
     // Clear the asserted interrupts.
-    //
     ROM_UARTIntClear(UART0_BASE, ulStatus);
 
-    //
     // Loop while there are characters in the receive FIFO.
-    //
     while(ROM_UARTCharsAvail(UART0_BASE))
     {
-        //
         // Read the next character from the UART and write it back to the UART.
-        //
-    	//UARTSend((unsigned char *)"Got: ", 5);
         ROM_UARTCharPutNonBlocking(UART0_BASE,
                                    ROM_UARTCharGetNonBlocking(UART0_BASE));
-
-        //
-        // Blink the LED to show a character transfer is occuring.
-        //
-        //GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
-
-        //
-        // Delay for 1 millisecond.  Each SysCtlDelay is about 3 clocks.
-        //
-        //SysCtlDelay(SysCtlClockGet() / (1000 * 3));
-
-        //
-        // Turn off the LED
-        //
-        //GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
-
     }
 }
 
 //*****************************************************************************
 //
-// Send a string to the UART.
+// Send a string to the UART.	-	Public, Non-blocking
 //
 //*****************************************************************************
 void
@@ -137,11 +107,9 @@ UARTSend(const unsigned char *pucBuffer, unsigned long ulCount)
 #endif
 }
 
-//*****************************************************************************
-//
-// This example demonstrates how to send a string of data to the UART.
-//
-//*****************************************************************************
+/********************************************************************
+* UARTInit() - Initialization routine for the UART module.
+********************************************************************/
 void
 UARTInit(void)
 {
@@ -153,67 +121,50 @@ UARTInit(void)
     FPUEnable();
     FPULazyStackingEnable();
 
-    //
-    // Set the clocking to run directly from the crystal.
-    //
-    /*ROM_SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_OSC | SYSCTL_OSC_MAIN |
-                       SYSCTL_XTAL_16MHZ);*/
-
-    //
-    // Enable the GPIO port that is used for the on-board LED.
-    //
-    //ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-
-    //
-    // Enable the GPIO pins for the LED (PF2).
-    //
-    //ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
-
-    //
     // Enable the peripherals used by this example.
-    //
     SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
-    //
-    // Enable processor interrupts.
-    //
-    //ROM_IntMasterEnable();
-
-    //
     // Set GPIO A0 and A1 as UART pins.
-    //
     GPIOPinConfigure(GPIO_PA0_U0RX);
     GPIOPinConfigure(GPIO_PA1_U0TX);
     GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
-    //
+    //	Set UART Clock source as 16MHZ crystal
+    UARTClockSourceSet(UART0_BASE,UART_CLOCK_PIOSC);
+
     // Configure the UART for 115,200, 8-N-1 operation.
-    //
-    UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), BAUD,
+    UARTConfigSetExpClk(UART0_BASE, CRYSTAL_16MHZ, (INT32U)BAUD,
                             (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                              UART_CONFIG_PAR_NONE));
-
-    //
-    // Enable the UART interrupt.
-    //
-    IntEnable(INT_UART0);
-    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
 
     /*	Enable FIFOs	*/
     UARTFIFOEnable(UART0_BASE);
     UARTFIFOLevelSet(UART0_BASE,UART_FIFO_TX4_8,UART_FIFO_RX4_8);
 
-    //
-    // Prompt for text to be entered.
-    //
-    //UARTSend((unsigned char *)"\033[2JEnter text: ", 16);
-
-    //
-    // Loop forever echoing data through the UART.
-    //
-    /*
-    while(1)
-    {
-    }*/
+    // Enable the UART interrupt.
+    IntEnable(INT_UART0);
+    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
 }
+
+//*****************************************************************************
+//
+// Send the welcome string to the UART.	-	Public, BLOCKING 30mS
+//
+//*****************************************************************************
+void UART_Welcome(void){
+
+	int i, j;
+#if defined(DB_UART) && defined(DB_PORT)
+    GPIOPinWrite(DB_PORT, DB_UART, 0);
+#endif
+	for (i = 0; i<36; i++){
+		for (j = 0; j<10; j++){
+			UARTCharPut(UART0_BASE,(INT8U)menuStr[i][j]);
+		}
+	}
+#if defined(DB_UART) && defined(DB_PORT)
+    GPIOPinWrite(DB_PORT, DB_UART, DB_UART);
+#endif
+}
+
