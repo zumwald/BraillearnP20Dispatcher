@@ -32,19 +32,9 @@
 //*****************************************************************************
 
 #include "includes.h"
-/*
-#include "inc/hw_ints.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
-#include "driverlib/debug.h"
-#include "driverlib/fpu.h"
-#include "driverlib/gpio.h"
-#include "driverlib/interrupt.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/rom.h"
-#include "driverlib/sysctl.h"
-#include "driverlib/uart.h"
-*/
+
+#define BAUD	9600
+
 void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
 //*****************************************************************************
 //
@@ -106,17 +96,17 @@ UARTIntHandler(void)
         //
         // Blink the LED to show a character transfer is occuring.
         //
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
+        //GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PIN_2);
 
         //
         // Delay for 1 millisecond.  Each SysCtlDelay is about 3 clocks.
         //
-        SysCtlDelay(SysCtlClockGet() / (1000 * 3));
+        //SysCtlDelay(SysCtlClockGet() / (1000 * 3));
 
         //
         // Turn off the LED
         //
-        GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
+        //GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_2, 0);
 
     }
 }
@@ -160,8 +150,8 @@ UARTInit(void)
     // instructions to be used within interrupt handlers, but at the expense of
     // extra stack usage.
     //
-    ROM_FPUEnable();
-    ROM_FPULazyStackingEnable();
+    FPUEnable();
+    FPULazyStackingEnable();
 
     //
     // Set the clocking to run directly from the crystal.
@@ -172,43 +162,47 @@ UARTInit(void)
     //
     // Enable the GPIO port that is used for the on-board LED.
     //
-    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
+    //ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
 
     //
     // Enable the GPIO pins for the LED (PF2).
     //
-    ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
+    //ROM_GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, GPIO_PIN_2);
 
     //
     // Enable the peripherals used by this example.
     //
-    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    ROM_SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
 
     //
     // Enable processor interrupts.
     //
-    ROM_IntMasterEnable();
+    //ROM_IntMasterEnable();
 
     //
     // Set GPIO A0 and A1 as UART pins.
     //
     GPIOPinConfigure(GPIO_PA0_U0RX);
     GPIOPinConfigure(GPIO_PA1_U0TX);
-    ROM_GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
     //
     // Configure the UART for 115,200, 8-N-1 operation.
     //
-    ROM_UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), 115200,
+    UARTConfigSetExpClk(UART0_BASE, ROM_SysCtlClockGet(), BAUD,
                             (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE |
                              UART_CONFIG_PAR_NONE));
 
     //
     // Enable the UART interrupt.
     //
-    ROM_IntEnable(INT_UART0);
-    ROM_UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+    IntEnable(INT_UART0);
+    UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+
+    /*	Enable FIFOs	*/
+    UARTFIFOEnable(UART0_BASE);
+    UARTFIFOLevelSet(UART0_BASE,UART_FIFO_TX4_8,UART_FIFO_RX4_8);
 
     //
     // Prompt for text to be entered.

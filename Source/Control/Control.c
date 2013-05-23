@@ -27,8 +27,18 @@ void CntlTask(void);
 static CNTLSTATES progState = MENU;
 static NOTESTATES noteState = nSELECT;
 static READSTATES readState = rSELECT;
-static INT16U sliceCnt = 0;
-const  INT8U menuStr1[] = " _               _ _ _      ______          _____  _   _\r\na";
+static INT32U sliceCnt = 0;
+const INT8U menuStr[36][10] = {"\r _       ","        _ ","_ _      _","_____     ","     _____","  _   _ \r\n",
+						   "\r| |      ","       (_)"," | |    | "," ____|   /","\\   |  __ ","\\| \\ | |\r\n",
+						   "\r| |__  _ ","__ __ _ _|"," | |    | ","|__     / "," \\  | |__)"," |  \\| |\r\n",
+						   "\r| '_ \\| '","__/ _` | |"," | |    | "," __|   / /","\\ \\ |  _  ","/| . ` |\r\n",
+						   "\r| |_) | |"," | (_| | |"," | |____| ","|____ / __","__ \\| | \\ ","\\| |\\  |\r\n",
+						   "\r|_.__/|_|","  \\__,_|_|","_|______|_","_____/_/  ","  \\_\\_|  \\","_\\_| \\_|\r\n"};
+/*const  INT8U menuStr[5][59] = { "| |             (_) | |    |  ____|   /\\   |  __ \\| \\ | |\r\n",
+								"| |__  _ __ __ _ _| | |    | |__     /  \\  | |__) |  \\| |\r\n",
+								"| '_ \\| '__/ _` | | | |    |  __|   / /\\ \\ |  _  /| . ` |\r\n",
+								"| |_) | | | (_| | | | |____| |____ / ____ \\| | \\ \\| |\\  |\r\n",
+								"|_.__/|_|  \\__,_|_|_|______|______/_/    \\_\\_|  \\_\\_| \\_|\r\n"};*/
 /********************************************************************
 * CntlInit() - Initialization routine for the control module.
 ********************************************************************/
@@ -79,26 +89,115 @@ void CntlTask(void) {
 			 */
 			switch(sliceCnt){
 			case 0:
-				UARTSend((INT8U *)"\r\n",2);
+				UARTSend((INT8U *)menuStr[0],(INT32U)sizeof(menuStr[0]));
 				break;
 			case 1:
-				//UARTSend((INT8U *)"abcdefg\n\r"/*hijklmnopqrstuv0123456789abcdefghijklmnopqrstuvwxyz"*/,9);
-				UARTSend((INT8U *)menuStr1,sizeof(menuStr1));
+				UARTSend((INT8U *)menuStr[1],(INT32U)sizeof(menuStr[1]));
 				break;
 			case 2:
-				//UARTSend((INT8U *)"| |             (_) | |    |  ____|   /\\   |  __ \\| \\ | |\r\n",59);
+				UARTSend((INT8U *)menuStr[2],(INT32U)sizeof(menuStr[2]));
 				break;
 			case 3:
-				//UARTSend((INT8U *)"| |__  _ __ __ _ _| | |    | |__     /  \\  | |__) |  \\| |\r\n",59);
+				UARTSend((INT8U *)menuStr[3],(INT32U)sizeof(menuStr[3]));
 				break;
 			case 4:
-				//UARTSend((INT8U *)"| '_ \\| '__/ _` | | | |    |  __|   / /\\ \\ |  _  /| . ` |\r\n",59);
+				UARTSend((INT8U *)menuStr[4],(INT32U)sizeof(menuStr[4]));
 				break;
 			case 5:
-				//UARTSend((INT8U *)"| |_) | | | (_| | | | |____| |____ / ____ \\| | \\ \\| |\\  |\r\n",59);
+				UARTSend((INT8U *)menuStr[5],(INT32U)sizeof(menuStr[5]));
 				break;
 			case 6:
-				//UARTSend((INT8U *)"|_.__/|_|  \\__,_|_|_|______|______/_/    \\_\\_|  \\_\\_| \\_|\r\n",59);
+				UARTSend((INT8U *)menuStr[6],(INT32U)sizeof(menuStr[6]));
+				break;
+			case 7:
+				UARTSend((INT8U *)menuStr[7],(INT32U)sizeof(menuStr[7]));
+				break;
+			case 8:
+				UARTSend((INT8U *)menuStr[8],(INT32U)sizeof(menuStr[8]));
+				break;
+			case 9:
+				UARTSend((INT8U *)menuStr[9],(INT32U)sizeof(menuStr[9]));
+				break;
+			case 10:
+				UARTSend((INT8U *)menuStr[10],(INT32U)sizeof(menuStr[10]));
+				break;
+			case 11:
+				UARTSend((INT8U *)menuStr[11],(INT32U)sizeof(menuStr[11]));
+				break;
+			case 12:
+				UARTSend((INT8U *)menuStr[12],(INT32U)sizeof(menuStr[12]));
+				break;
+			case 13:
+				UARTSend((INT8U *)menuStr[13],(INT32U)sizeof(menuStr[13]));
+				break;
+			case 14:
+				UARTSend((INT8U *)menuStr[14],(INT32U)sizeof(menuStr[14]));
+				break;
+			case 15:
+				UARTSend((INT8U *)menuStr[15],(INT32U)sizeof(menuStr[15]));
+				break;
+			case 16:
+				UARTSend((INT8U *)menuStr[16],(INT32U)sizeof(menuStr[16]));
+				break;
+			case 17:
+				UARTSend((INT8U *)menuStr[17],(INT32U)sizeof(menuStr[17]));
+				break;
+			case 18:
+				UARTSend((INT8U *)menuStr[18],(INT32U)sizeof(menuStr[18]));
+				break;
+			case 19:
+				UARTSend((INT8U *)menuStr[19],(INT32U)sizeof(menuStr[19]));
+				break;
+			case 20:
+				UARTSend((INT8U *)menuStr[20],(INT32U)sizeof(menuStr[20]));
+				break;
+			case 21:
+				UARTSend((INT8U *)menuStr[21],(INT32U)sizeof(menuStr[21]));
+				break;
+			case 22:
+				UARTSend((INT8U *)menuStr[22],(INT32U)sizeof(menuStr[22]));
+				break;
+			case 23:
+				UARTSend((INT8U *)menuStr[23],(INT32U)sizeof(menuStr[23]));
+				break;
+			case 24:
+				UARTSend((INT8U *)menuStr[24],(INT32U)sizeof(menuStr[24]));
+				break;
+			case 25:
+				UARTSend((INT8U *)menuStr[25],(INT32U)sizeof(menuStr[25]));
+				break;
+			case 26:
+				UARTSend((INT8U *)menuStr[26],(INT32U)sizeof(menuStr[26]));
+				break;
+			case 27:
+				UARTSend((INT8U *)menuStr[27],(INT32U)sizeof(menuStr[27]));
+				break;
+			case 28:
+				UARTSend((INT8U *)menuStr[28],(INT32U)sizeof(menuStr[28]));
+				break;
+			case 29:
+				UARTSend((INT8U *)menuStr[29],(INT32U)sizeof(menuStr[29]));
+				break;
+			case 30:
+				UARTSend((INT8U *)menuStr[30],(INT32U)sizeof(menuStr[30]));
+				break;
+			case 31:
+				UARTSend((INT8U *)menuStr[31],(INT32U)sizeof(menuStr[31]));
+				break;
+			case 32:
+				UARTSend((INT8U *)menuStr[32],(INT32U)sizeof(menuStr[32]));
+				break;
+			case 33:
+				UARTSend((INT8U *)menuStr[33],(INT32U)sizeof(menuStr[33]));
+				break;
+			case 34:
+				UARTSend((INT8U *)menuStr[34],(INT32U)sizeof(menuStr[34]));
+				break;
+			case 35:
+				UARTSend((INT8U *)menuStr[35],(INT32U)sizeof(menuStr[35]));
+				break;
+			case 36:
+				UARTSend((INT8U *)menuStr[36],(INT32U)sizeof(menuStr[36]));
 				break;
 			default:
 				sliceCnt = 0;

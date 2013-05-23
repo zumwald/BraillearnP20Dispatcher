@@ -15,7 +15,7 @@ $(GEN_CMDS__FLAG) \
 "./main.obj" \
 -l"libc.a" \
 -l"E:/StellarisWare/boards/ek-lm4f120xl/uart_echo/ccs/../../../../driverlib/ccs-cm4f/Debug/driverlib-cm4f.lib" \
-"../uart_echo_ccs.cmd" \
+"../Braillearn_ccs.cmd" \
 
 -include ../makefile.init
 
