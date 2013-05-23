@@ -41,7 +41,7 @@ static INT16U KeyScan(void);         /* Makes a single keypad scan  */
 static INT16U KeyBuffer;             /* Holds the ASCII code for key*/
 INT8U IsCntlKey(INT16U key);
 static INT8U UBrailleLookup[256] = {0,',','!','\t',0,';',':',0x0A,
-									'.','\'',')',']','"','?','0',
+									'.','\'',')',']',0,'"','?','0',
 							/*16*/	'a','d','c',0,'b',0,0,0,
 									'A','D','C',0,'B','@',0,'8',
 							/*32*/	'e','h','g','`','f','<',0,0,
