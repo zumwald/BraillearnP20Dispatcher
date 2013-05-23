@@ -40,6 +40,7 @@
 * Module Defines
 ********************************************************************/
 #define BAUD	115200
+#define BUFLEN	16
 
 /********************************************************************
 * Public Resources
@@ -55,7 +56,25 @@ const INT8U menuStr[36][10] = {"\r _       ","        _ ","_ _      _","_____   
 						   "\r| '_ \\| '","__/ _` | |"," | |    | "," __|   / /","\\ \\ |  _  ","/| . ` |\r\n",
 						   "\r| |_) | |"," | (_| | |"," | |____| ","|____ / __","__ \\| | \\ ","\\| |\\  |\r\n",
 						   "\r|_.__/|_|","  \\__,_|_|","_|______|_","_____/_/  ","  \\_\\_|  \\","_\\_| \\_|\r\n"};
+static INT8U RxBuffer[BUFLEN];
+static INT8U i = 0;
+static INT8U bFlag = FALSE;
 
+/********************************************************************
+* UARTGetBuffer() - returns 8Byte Rx buffer contents or null if empty.
+********************************************************************/
+void UARTGetBuffer(INT8U *outbuf){
+
+	int j;
+
+	for(j=0;j<i;j++){
+		outbuf[j] = RxBuffer[j];
+	}
+	/*	add null-terminator	*/
+	outbuf[j] = 0x00;
+	/*	Reset buffer pointer	*/
+	i = 0;
+}
 //*****************************************************************************
 //
 // The UART interrupt handler.
@@ -65,6 +84,7 @@ void
 UARTIntHandler(void)
 {
     unsigned long ulStatus;
+    INT8U ch;
 
     // Get the interrupt status.
     ulStatus = ROM_UARTIntStatus(UART0_BASE, true);
@@ -76,8 +96,10 @@ UARTIntHandler(void)
     while(ROM_UARTCharsAvail(UART0_BASE))
     {
         // Read the next character from the UART and write it back to the UART.
-        ROM_UARTCharPutNonBlocking(UART0_BASE,
-                                   ROM_UARTCharGetNonBlocking(UART0_BASE));
+    	ch = ROM_UARTCharGetNonBlocking(UART0_BASE);
+        ROM_UARTCharPutNonBlocking(UART0_BASE,ch);
+        RxBuffer[i++] = ch;
+        if (i == BUFLEN){i = 0;}
     }
 }
 
@@ -168,3 +190,14 @@ void UART_Welcome(void){
 #endif
 }
 
+
+/********************************************************************
+* UARTTask() - Timeslice task for UART communication
+********************************************************************/
+void UARTTask(void){
+
+	/*	if data available, parse it	*/
+	if (bFlag){
+
+	}else{}
+}

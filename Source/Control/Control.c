@@ -5,53 +5,60 @@
  *      Author: Dan Zumwalt
  */
 /********************************************************************
-* Project master header file
-********************************************************************/
+ * Project master header file
+ ********************************************************************/
 #include "includes.h"
 
 /********************************************************************
-* Module Defines
-********************************************************************/
-typedef enum{MENU,NOTES,READ,LEARN,CHAT} CNTLSTATES;
-typedef enum{nNOTES,nNEW,nOLD,nSELECT}NOTESTATES;
-typedef enum{rREAD,rSELECT}READSTATES;
+ * Module Defines
+ ********************************************************************/
+typedef enum {
+	MENU, NOTES, READ, LEARN, CHAT
+} CNTLSTATES;
+typedef enum {
+	nNOTES, nNEW, nOLD, nSELECT
+} NOTESTATES;
+typedef enum {
+	rREAD, rSELECT
+} READSTATES;
 
 /********************************************************************
-* Public Resources
-********************************************************************/
+ * Public Resources
+ ********************************************************************/
 void CntlTask(void);
 
 /********************************************************************
-* Private Resources
-********************************************************************/
+ * Private Resources
+ ********************************************************************/
 static CNTLSTATES progState = MENU;
 static NOTESTATES noteState = nSELECT;
 static READSTATES readState = rSELECT;
 static INT32U sliceCnt = 0;
+static INT8U bMenuDisplayed = FALSE;
 
 /********************************************************************
-* CntlInit() - Initialization routine for the control module.
-********************************************************************/
-void CntlInit(void){
+ * CntlInit() - Initialization routine for the control module.
+ ********************************************************************/
+void CntlInit(void) {
 	/*	Initialize resources	*/
 
 }
 
 /********************************************************************
-* CntlTask() - Implements program flow according to Menu structure.
-* (Public)
-********************************************************************/
+ * CntlTask() - Implements program flow according to Menu structure.
+ * (Public)
+ ********************************************************************/
 void CntlTask(void) {
 	INT8U key, cntlFlag;
 	INT16U rawKey;
 
-	key = GetKey(&cntlFlag,&rawKey);
+	key = GetKey(&cntlFlag, &rawKey);
 
-	switch(progState){
+	switch (progState) {
 	/*		Menu State			*/
 	default:
 	case MENU:
-		switch(key){
+		switch (key) {
 		case 'n':
 		case 'N':
 			progState = NOTES;
@@ -77,23 +84,40 @@ void CntlTask(void) {
 			 * 	 L: Learn?
 			 * 	 C: Chat?	"
 			 */
-			switch(sliceCnt){
-			case 0:
-			default:
-				sliceCnt = 0;
-				break;
+			if ((!bMenuDisplayed) || (sliceCnt > 6000)) {
+				switch (sliceCnt) {
+				case 0:
+					UARTSend("Main Menu\r\n", (INT32U) 11);
+					break;
+				case 1:
+					UARTSend("[N]otes     ", (INT32U) 12);
+					break;
+				case 2:
+					UARTSend("[R]ead     ", (INT32U) 11);
+					break;
+				case 3:
+					UARTSend("[L]earn     ", (INT32U) 12);
+					break;
+				case 4:
+					UARTSend("[C]hat\r\n", (INT32U) 8);
+					bMenuDisplayed = TRUE;
+					break;
+				default:
+					sliceCnt = 0;
+					break;
+				}
 			}
 			sliceCnt++;
 			break;
 		}
 		break;
-	/*	*	*	*	*	*	*	*/
-	/*		Note State			*/
+		/*	*	*	*	*	*	*	*/
+		/*		Note State			*/
 	case NOTES:
-		switch(noteState){
+		switch (noteState) {
 		default:
 		case nSELECT:
-			switch(key){
+			switch (key) {
 			case 'n':
 			case 'N':
 				noteState = nNEW;
@@ -103,9 +127,11 @@ void CntlTask(void) {
 				noteState = nOLD;
 				break;
 			default:
-				if (cntlFlag && (key == 'M')){
+				if (cntlFlag && (key == 'M')) {
 					progState = MENU;
-				}else{}
+					bMenuDisplayed = FALSE;
+				} else {
+				}
 				//	Display
 				/*	"N: New?
 				 *   O: Old?	"
@@ -113,16 +139,16 @@ void CntlTask(void) {
 			}
 			break;
 		case nNEW:
-			if (!cntlFlag && (key != 'M')){
+			if (!cntlFlag && (key != 'M')) {
 				//	get note file name (slice counting)
 				// 	when LF received, noteState = NOTES
-			}else{
+			} else {
 				noteState = nSELECT;
 			}
 			break;
 		case nOLD:
-			if (cntlFlag){
-				switch(key){
+			if (cntlFlag) {
+				switch (key) {
 				case 'M':
 					noteState = nSELECT;
 					break;
@@ -133,31 +159,33 @@ void CntlTask(void) {
 					//	next note
 					break;
 				}
-			}else if ((key == ' ') || (key == 0x0A)){
+			} else if ((key == ' ') || (key == 0x0A)) {
 				noteState = nNOTES;
-			}else{
+			} else {
 				//	Display current note name
 			}
 			break;
 		case nNOTES:
-			if (!cntlFlag && (key != 'M')){
+			if (!cntlFlag && (key != 'M')) {
 				//	Notes(key,rawKey);
-			}else{
+			} else {
 				progState = MENU;
+				bMenuDisplayed = FALSE;
 			}
 			break;
 		}
 		break;
-	/*	*	*	*	*	*	*	*/
-	/*		Read State			*/
+		/*	*	*	*	*	*	*	*/
+		/*		Read State			*/
 	case READ:
-		switch(readState){
+		switch (readState) {
 		default:
 		case rSELECT:
-			if (cntlFlag){
-				switch(key){
+			if (cntlFlag) {
+				switch (key) {
 				case 'M':
 					progState = MENU;
+					bMenuDisplayed = FALSE;
 					break;
 				case '<':
 					//	previous doc
@@ -166,8 +194,8 @@ void CntlTask(void) {
 					//	next doc
 					break;
 				}
-			}else{
-				switch(key){
+			} else {
+				switch (key) {
 				case 0x0A:
 				case ' ':
 					readState = rREAD;
@@ -175,33 +203,35 @@ void CntlTask(void) {
 			}
 			break;
 		case rREAD:
-			if (!cntlFlag && (key != 'M')){
+			if (!cntlFlag && (key != 'M')) {
 				//	Read()
-			}else{
+			} else {
 				readState = rSELECT;
 			}
 			break;
 		}
 		break;
-	/*	*	*	*	*	*	*	*/
-	/*		Learn State			*/
+		/*	*	*	*	*	*	*	*/
+		/*		Learn State			*/
 	case LEARN:
-		if (!cntlFlag && (key != 'M')){
+		if (!cntlFlag && (key != 'M')) {
 			//	Learn(key,rawKey);
-		}else{
+		} else {
 			progState = MENU;
+			bMenuDisplayed = FALSE;
 		}
 		break;
-	/*	*	*	*	*	*	*	*/
-	/*		Chat State			*/
+		/*	*	*	*	*	*	*	*/
+		/*		Chat State			*/
 	case CHAT:
-		if (!cntlFlag && (key != 'M')){
+		if (!cntlFlag && (key != 'M')) {
 			//	Chat(key,rawKey);
-		}else{
+		} else {
 			progState = MENU;
+			bMenuDisplayed = FALSE;
 		}
 		break;
-	/*	*	*	*	*	*	*	*/
+		/*	*	*	*	*	*	*	*/
 	}
 }
 /********************************************************************/
