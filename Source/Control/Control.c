@@ -63,6 +63,7 @@ void CntlTask(void) {
 		UARTSend("Key: ", (INT32U) 5);
 		UARTSend(&key, (INT32U) 1);
 		UARTSend("\r\n",(INT32U)2);
+		(void)SPISendChar(key,(INT8U)0x00);
 	} else {
 	}
 

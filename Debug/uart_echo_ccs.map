@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker PC v5.0.1                      
 ******************************************************************************
->> Linked Thu May 23 15:51:09 2013
+>> Linked Thu May 23 23:18:39 2013
 
 OUTPUT FILE NAME:   <Braillearn.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 00000d21
+ENTRY POINT SYMBOL: "_c_int00"  address: 00000dd9
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  000014ce  0003eb32  R  X
+  FLASH                 00000000   00040000  00001586  0003ea7a  R  X
   SRAM                  20000000   00008000  0000027f  00007d81  RW X
 
 
@@ -19,11 +19,11 @@ SEGMENT ALLOCATION MAP
 
 run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
-00000000    00000000    000014d0   000014d0    r-x
+00000000    00000000    00001588   00001588    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    00000eea   00000eea    r-x .text
-  00001158    00001158    00000290   00000290    r-- .const
-  000013e8    000013e8    000000e8   000000e8    r-- .cinit
+  0000026c    0000026c    00000fa2   00000fa2    r-x .text
+  00001210    00001210    00000290   00000290    r-- .const
+  000014a0    000014a0    000000e8   000000e8    r-- .cinit
 20000000    20000000    00000282   00000129    rw-
   20000000    20000000    00000129   00000129    rw- .data
   2000012c    2000012c    00000100   00000000    rw- .stack
@@ -41,80 +41,82 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
 
-.text      0    0000026c    00000eea     
-                  0000026c    00000288     Control.obj (.text:CntlTask)
-                  000004f4    0000013c     driverlib-cm4f.lib : sysctl.obj (.text:SysCtlClockSet)
-                  00000630    000000d0     main.obj (.text:main)
-                  00000700    000000c8     driverlib-cm4f.lib : gpio.obj (.text:GPIOPadConfigSet)
-                  000007c8    000000a8     UART.obj (.text:UARTInit)
-                  00000870    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
-                  0000090c    00000094                                   : auto_init.obj (.text)
-                  000009a0    00000080     UART.obj (.text:UARTTask)
-                  00000a20    00000070     UART.obj (.text:UARTIntHandler)
-                  00000a90    0000006c     Key.obj (.text:KeyScan)
-                  00000afc    00000068     Key.obj (.text:KeyTask)
-                  00000b64    00000064     driverlib-cm4f.lib : interrupt.obj (.text:IntEnable)
-                  00000bc8    0000005e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text)
-                  00000c26    00000002     Control.obj (.text:CntlInit)
-                  00000c28    00000058     Key.obj (.text:KeyInit)
-                  00000c80    00000058     driverlib-cm4f.lib : sysctl.obj (.text:SysCtlPeripheralEnable)
-                  00000cd8    00000048                        : gpio.obj (.text:GPIOPinConfigure)
-                  00000d20    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
-                  00000d68    00000044                                   : cpy_tbl.obj (.text)
-                  00000dac    00000042     driverlib-cm4f.lib : uart.obj (.text:UARTConfigSetExpClk)
-                  00000dee    00000002     startup_ccs.obj (.text:FaultISR)
-                  00000df0    00000040     UART.obj (.text:UARTSend)
-                  00000e30    00000040     UART.obj (.text:UART_Welcome)
-                  00000e70    00000040     rtsv7M4_T_le_v4SPD16_eabi.lib : exit.obj (.text)
-                  00000eb0    0000003c     main.obj (.text:Timer0IntHandler)
-                  00000eec    00000034     Key.obj (.text:GetKey)
-                  00000f20    0000002e     driverlib-cm4f.lib : gpio.obj (.text:GPIODirModeSet)
-                  00000f4e    00000002     startup_ccs.obj (.text:IntDefaultHandler)
-                  00000f50    0000002c     UART.obj (.text:UARTSendChar)
-                  00000f7c    00000028     Key.obj (.text:IsCntlKey)
-                  00000fa4    00000028     driverlib-cm4f.lib : timer.obj (.text:TimerConfigure)
-                  00000fcc    0000001c                        : uart.obj (.text:UARTDisable)
-                  00000fe8    0000001c     UART.obj (.text:UARTGetBuffer)
-                  00001004    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
-                  0000101c    00000014     driverlib-cm4f.lib : uart.obj (.text:UARTEnable)
-                  00001030    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
-                  00001044    00000012     driverlib-cm4f.lib : gpio.obj (.text:GPIOPinTypeGPIOInput)
-                  00001056    00000012                        : gpio.obj (.text:GPIOPinTypeGPIOOutput)
-                  00001068    00000012                        : gpio.obj (.text:GPIOPinTypeUART)
-                  0000107a    00000012                        : timer.obj (.text:TimerLoadSet)
-                  0000108c    00000012     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
-                  0000109e    00000002     startup_ccs.obj (.text:NmiSR)
-                  000010a0    00000010     driverlib-cm4f.lib : fpu.obj (.text:FPUEnable)
-                  000010b0    00000010                        : fpu.obj (.text:FPULazyStackingEnable)
-                  000010c0    0000000e                        : timer.obj (.text:TimerEnable)
-                  000010ce    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
-                  000010dc    0000000c     driverlib-cm4f.lib : cpu.obj (.text:CPUcpsie)
-                  000010e8    0000000a                        : gpio.obj (.text:GPIOPinRead)
-                  000010f2    0000000a                        : gpio.obj (.text:GPIOPinWrite)
-                  000010fc    0000000a                        : interrupt.obj (.text:IntMasterEnable)
-                  00001106    0000000a                        : uart.obj (.text:UARTCharPut)
-                  00001110    0000000a                        : uart.obj (.text:UARTFIFOEnable)
-                  0000111a    0000000a                        : uart.obj (.text:UARTIntDisable)
-                  00001124    00000008                        : timer.obj (.text:TimerIntEnable)
-                  0000112c    00000008                        : uart.obj (.text:UARTIntEnable)
-                  00001134    00000006     startup_ccs.obj (.text:ResetISR)
-                  0000113a    00000006     driverlib-cm4f.lib : sysctl.obj (.text:SysCtlDelay)
-                  00001140    00000006                        : uart.obj (.text:UARTClockSourceSet)
-                  00001146    00000006                        : uart.obj (.text:UARTFIFOLevelSet)
-                  0000114c    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
-                  00001152    00000004     driverlib-cm4f.lib : timer.obj (.text:TimerIntClear)
+.text      0    0000026c    00000fa2     
+                  0000026c    00000294     Control.obj (.text:CntlTask)
+                  00000500    0000013c     driverlib-cm4f.lib : sysctl.obj (.text:SysCtlClockSet)
+                  0000063c    000000d4     main.obj (.text:main)
+                  00000710    000000c8     driverlib-cm4f.lib : gpio.obj (.text:GPIOPadConfigSet)
+                  000007d8    000000a8     UART.obj (.text:UARTInit)
+                  00000880    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  0000091c    00000094                                   : auto_init.obj (.text)
+                  000009b0    00000080     UART.obj (.text:UARTTask)
+                  00000a30    00000070     UART.obj (.text:UARTIntHandler)
+                  00000aa0    0000006c     Key.obj (.text:KeyScan)
+                  00000b0c    00000068     Key.obj (.text:KeyTask)
+                  00000b74    00000064     driverlib-cm4f.lib : interrupt.obj (.text:IntEnable)
+                  00000bd8    00000060     SPI.obj (.text:SPIInit)
+                  00000c38    0000005e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text)
+                  00000c96    00000002     Control.obj (.text:CntlInit)
+                  00000c98    00000058     Key.obj (.text:KeyInit)
+                  00000cf0    00000058     driverlib-cm4f.lib : sysctl.obj (.text:SysCtlPeripheralEnable)
+                  00000d48    00000048                        : gpio.obj (.text:GPIOPinConfigure)
+                  00000d90    00000048     SPI.obj (.text:SPISendChar)
+                  00000dd8    00000048     rtsv7M4_T_le_v4SPD16_eabi.lib : boot.obj (.text)
+                  00000e20    00000044                                   : cpy_tbl.obj (.text)
+                  00000e64    00000042     driverlib-cm4f.lib : uart.obj (.text:UARTConfigSetExpClk)
+                  00000ea6    00000002     startup_ccs.obj (.text:FaultISR)
+                  00000ea8    00000040     UART.obj (.text:UARTSend)
+                  00000ee8    00000040     UART.obj (.text:UART_Welcome)
+                  00000f28    00000040     rtsv7M4_T_le_v4SPD16_eabi.lib : exit.obj (.text)
+                  00000f68    0000003c     main.obj (.text:Timer0IntHandler)
+                  00000fa4    00000034     Key.obj (.text:GetKey)
+                  00000fd8    0000002e     driverlib-cm4f.lib : gpio.obj (.text:GPIODirModeSet)
+                  00001006    00000002     startup_ccs.obj (.text:IntDefaultHandler)
+                  00001008    0000002c     UART.obj (.text:UARTSendChar)
+                  00001034    00000028     Key.obj (.text:IsCntlKey)
+                  0000105c    00000028     driverlib-cm4f.lib : timer.obj (.text:TimerConfigure)
+                  00001084    0000001c                        : uart.obj (.text:UARTDisable)
+                  000010a0    0000001c     UART.obj (.text:UARTGetBuffer)
+                  000010bc    00000018     rtsv7M4_T_le_v4SPD16_eabi.lib : args_main.obj (.text)
+                  000010d4    00000014     driverlib-cm4f.lib : uart.obj (.text:UARTEnable)
+                  000010e8    00000014     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.text)
+                  000010fc    00000012     driverlib-cm4f.lib : gpio.obj (.text:GPIOPinTypeGPIOInput)
+                  0000110e    00000012                        : gpio.obj (.text:GPIOPinTypeGPIOOutput)
+                  00001120    00000012                        : gpio.obj (.text:GPIOPinTypeUART)
+                  00001132    00000012                        : timer.obj (.text:TimerLoadSet)
+                  00001144    00000012     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
+                  00001156    00000002     startup_ccs.obj (.text:NmiSR)
+                  00001158    00000010     driverlib-cm4f.lib : fpu.obj (.text:FPUEnable)
+                  00001168    00000010                        : fpu.obj (.text:FPULazyStackingEnable)
+                  00001178    0000000e                        : timer.obj (.text:TimerEnable)
+                  00001186    0000000e     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_none.obj (.text:decompress:none)
+                  00001194    0000000c     driverlib-cm4f.lib : cpu.obj (.text:CPUcpsie)
+                  000011a0    0000000a                        : gpio.obj (.text:GPIOPinRead)
+                  000011aa    0000000a                        : gpio.obj (.text:GPIOPinWrite)
+                  000011b4    0000000a                        : interrupt.obj (.text:IntMasterEnable)
+                  000011be    0000000a                        : uart.obj (.text:UARTCharPut)
+                  000011c8    0000000a                        : uart.obj (.text:UARTFIFOEnable)
+                  000011d2    0000000a                        : uart.obj (.text:UARTIntDisable)
+                  000011dc    00000008                        : timer.obj (.text:TimerIntEnable)
+                  000011e4    00000008                        : uart.obj (.text:UARTIntEnable)
+                  000011ec    00000006     startup_ccs.obj (.text:ResetISR)
+                  000011f2    00000006     driverlib-cm4f.lib : sysctl.obj (.text:SysCtlDelay)
+                  000011f8    00000006                        : uart.obj (.text:UARTClockSourceSet)
+                  000011fe    00000006                        : uart.obj (.text:UARTFIFOLevelSet)
+                  00001204    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
+                  0000120a    00000004     driverlib-cm4f.lib : timer.obj (.text:TimerIntClear)
 
-.const     0    00001158    00000290     
-                  00001158    00000168     UART.obj (.const:menuStr)
-                  000012c0    00000078     driverlib-cm4f.lib : gpio.obj (.const:g_pulGPIOBaseAddrs)
-                  00001338    00000070                        : interrupt.obj (.const)
-                  000013a8    00000040                        : sysctl.obj (.const)
+.const     0    00001210    00000290     
+                  00001210    00000168     UART.obj (.const:menuStr)
+                  00001378    00000078     driverlib-cm4f.lib : gpio.obj (.const:g_pulGPIOBaseAddrs)
+                  000013f0    00000070                        : interrupt.obj (.const)
+                  00001460    00000040                        : sysctl.obj (.const)
 
-.cinit     0    000013e8    000000e8     
-                  000013e8    000000c4     (.cinit..data.load) [load image, compression = rle]
-                  000014ac    0000000c     (__TI_handler_table)
-                  000014b8    00000008     (.cinit..bss.load) [load image, compression = zero_init]
-                  000014c0    00000010     (__TI_cinit_table)
+.cinit     0    000014a0    000000e8     
+                  000014a0    000000c4     (.cinit..data.load) [load image, compression = rle]
+                  00001564    0000000c     (__TI_handler_table)
+                  00001570    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00001578    00000010     (__TI_cinit_table)
 
 .data      0    20000000    00000129     
                   20000000    00000100     Key.obj (.data:UBrailleLookup)
@@ -141,14 +143,14 @@ section   page    origin      length       input sections
 
 LINKER GENERATED COPY TABLES
 
-__TI_cinit_table @ 000014c0 records: 2, size/record: 8, table size: 16
-	.data: load addr=000013e8, load size=000000c4 bytes, run addr=20000000, run size=00000129 bytes, compression=rle
-	.bss: load addr=000014b8, load size=00000008 bytes, run addr=2000022c, run size=00000056 bytes, compression=zero_init
+__TI_cinit_table @ 00001578 records: 2, size/record: 8, table size: 16
+	.data: load addr=000014a0, load size=000000c4 bytes, run addr=20000000, run size=00000129 bytes, compression=rle
+	.bss: load addr=00001570, load size=00000008 bytes, run addr=2000022c, run size=00000056 bytes, compression=zero_init
 
 
 LINKER GENERATED HANDLER TABLE
 
-__TI_handler_table @ 000014ac records: 3, size/record: 4, table size: 12
+__TI_handler_table @ 00001564 records: 3, size/record: 4, table size: 12
 	index: 0, handler: __TI_decompress_rle24
 	index: 1, handler: __TI_decompress_none
 	index: 2, handler: __TI_zero_init
@@ -158,91 +160,93 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address    name
 --------   ----
-00000e71   C$$EXIT
-000010dd   CPUcpsie
-00000c27   CntlInit
+00000f29   C$$EXIT
+00001195   CPUcpsie
+00000c97   CntlInit
 0000026d   CntlTask
-000010a1   FPUEnable
-000010b1   FPULazyStackingEnable
-00000f21   GPIODirModeSet
-00000701   GPIOPadConfigSet
-00000cd9   GPIOPinConfigure
-000010e9   GPIOPinRead
-00001045   GPIOPinTypeGPIOInput
-00001057   GPIOPinTypeGPIOOutput
-00001069   GPIOPinTypeUART
-000010f3   GPIOPinWrite
-00000eed   GetKey
-00000b65   IntEnable
-000010fd   IntMasterEnable
-00000f7d   IsCntlKey
-00000c29   KeyInit
-00000afd   KeyTask
-00001135   ResetISR
+00001159   FPUEnable
+00001169   FPULazyStackingEnable
+00000fd9   GPIODirModeSet
+00000711   GPIOPadConfigSet
+00000d49   GPIOPinConfigure
+000011a1   GPIOPinRead
+000010fd   GPIOPinTypeGPIOInput
+0000110f   GPIOPinTypeGPIOOutput
+00001121   GPIOPinTypeUART
+000011ab   GPIOPinWrite
+00000fa5   GetKey
+00000b75   IntEnable
+000011b5   IntMasterEnable
+00001035   IsCntlKey
+00000c99   KeyInit
+00000b0d   KeyTask
+000011ed   ResetISR
 UNDEFED    SHT$$INIT_ARRAY$$Base
 UNDEFED    SHT$$INIT_ARRAY$$Limit
-000004f5   SysCtlClockSet
-0000113b   SysCtlDelay
-00000c81   SysCtlPeripheralEnable
-00000eb1   Timer0IntHandler
-00000fa5   TimerConfigure
-000010c1   TimerEnable
-00001153   TimerIntClear
-00001125   TimerIntEnable
-0000107b   TimerLoadSet
-00001107   UARTCharPut
-00001141   UARTClockSourceSet
-00000dad   UARTConfigSetExpClk
-00000fcd   UARTDisable
-0000101d   UARTEnable
-00001111   UARTFIFOEnable
-00001147   UARTFIFOLevelSet
-00000fe9   UARTGetBuffer
-000007c9   UARTInit
-0000111b   UARTIntDisable
-0000112d   UARTIntEnable
-00000a21   UARTIntHandler
-00000df1   UARTSend
-00000f51   UARTSendChar
-000009a1   UARTTask
-00000e31   UART_Welcome
+00000bd9   SPIInit
+00000d91   SPISendChar
+00000501   SysCtlClockSet
+000011f3   SysCtlDelay
+00000cf1   SysCtlPeripheralEnable
+00000f69   Timer0IntHandler
+0000105d   TimerConfigure
+00001179   TimerEnable
+0000120b   TimerIntClear
+000011dd   TimerIntEnable
+00001133   TimerLoadSet
+000011bf   UARTCharPut
+000011f9   UARTClockSourceSet
+00000e65   UARTConfigSetExpClk
+00001085   UARTDisable
+000010d5   UARTEnable
+000011c9   UARTFIFOEnable
+000011ff   UARTFIFOLevelSet
+000010a1   UARTGetBuffer
+000007d9   UARTInit
+000011d3   UARTIntDisable
+000011e5   UARTIntEnable
+00000a31   UARTIntHandler
+00000ea9   UARTSend
+00001009   UARTSendChar
+000009b1   UARTTask
+00000ee9   UART_Welcome
 2000022c   __STACK_END
 00000100   __STACK_SIZE
 2000022c   __STACK_TOP
-000014c0   __TI_CINIT_Base
-000014d0   __TI_CINIT_Limit
-000014ac   __TI_Handler_Table_Base
-000014b8   __TI_Handler_Table_Limit
+00001578   __TI_CINIT_Base
+00001588   __TI_CINIT_Limit
+00001564   __TI_Handler_Table_Base
+00001570   __TI_Handler_Table_Limit
 00000001   __TI_args_main
-0000090d   __TI_auto_init
-000010cf   __TI_decompress_none
-0000114d   __TI_decompress_rle24
+0000091d   __TI_auto_init
+00001187   __TI_decompress_none
+00001205   __TI_decompress_rle24
 00000000   __TI_static_base__
-0000108d   __TI_zero_init
-00000871   __aeabi_memcpy
-00000871   __aeabi_memcpy4
-00000871   __aeabi_memcpy8
+00001145   __TI_zero_init
+00000881   __aeabi_memcpy
+00000881   __aeabi_memcpy4
+00000881   __aeabi_memcpy8
 ffffffff   __binit__
 ffffffff   __c_args__
 2000012c   __stack
-00001005   _args_main
-00000d21   _c_int00
+000010bd   _args_main
+00000dd9   _c_int00
 20000114   _cleanup_ptr
 20000118   _dtors_ptr
 2000010c   _lock
-0000103f   _nop
-00001037   _register_lock
-00001031   _register_unlock
+000010f7   _nop
+000010ef   _register_lock
+000010e9   _register_unlock
 20000110   _unlock
-00000e75   abort
+00000f2d   abort
 ffffffff   binit
-00000d69   copy_in
-00000e7d   exit
+00000e21   copy_in
+00000f35   exit
 00000000   g_pfnVectors
-00000631   main
+0000063d   main
 2000011c   main_func_sp
-00000871   memcpy
-00001158   menuStr
+00000881   memcpy
+00001210   menuStr
 20000128   tickFlag
 
 
@@ -255,73 +259,75 @@ address    name
 00000001   __TI_args_main
 00000100   __STACK_SIZE
 0000026d   CntlTask
-000004f5   SysCtlClockSet
-00000631   main
-00000701   GPIOPadConfigSet
-000007c9   UARTInit
-00000871   __aeabi_memcpy
-00000871   __aeabi_memcpy4
-00000871   __aeabi_memcpy8
-00000871   memcpy
-0000090d   __TI_auto_init
-000009a1   UARTTask
-00000a21   UARTIntHandler
-00000afd   KeyTask
-00000b65   IntEnable
-00000c27   CntlInit
-00000c29   KeyInit
-00000c81   SysCtlPeripheralEnable
-00000cd9   GPIOPinConfigure
-00000d21   _c_int00
-00000d69   copy_in
-00000dad   UARTConfigSetExpClk
-00000df1   UARTSend
-00000e31   UART_Welcome
-00000e71   C$$EXIT
-00000e75   abort
-00000e7d   exit
-00000eb1   Timer0IntHandler
-00000eed   GetKey
-00000f21   GPIODirModeSet
-00000f51   UARTSendChar
-00000f7d   IsCntlKey
-00000fa5   TimerConfigure
-00000fcd   UARTDisable
-00000fe9   UARTGetBuffer
-00001005   _args_main
-0000101d   UARTEnable
-00001031   _register_unlock
-00001037   _register_lock
-0000103f   _nop
-00001045   GPIOPinTypeGPIOInput
-00001057   GPIOPinTypeGPIOOutput
-00001069   GPIOPinTypeUART
-0000107b   TimerLoadSet
-0000108d   __TI_zero_init
-000010a1   FPUEnable
-000010b1   FPULazyStackingEnable
-000010c1   TimerEnable
-000010cf   __TI_decompress_none
-000010dd   CPUcpsie
-000010e9   GPIOPinRead
-000010f3   GPIOPinWrite
-000010fd   IntMasterEnable
-00001107   UARTCharPut
-00001111   UARTFIFOEnable
-0000111b   UARTIntDisable
-00001125   TimerIntEnable
-0000112d   UARTIntEnable
-00001135   ResetISR
-0000113b   SysCtlDelay
-00001141   UARTClockSourceSet
-00001147   UARTFIFOLevelSet
-0000114d   __TI_decompress_rle24
-00001153   TimerIntClear
-00001158   menuStr
-000014ac   __TI_Handler_Table_Base
-000014b8   __TI_Handler_Table_Limit
-000014c0   __TI_CINIT_Base
-000014d0   __TI_CINIT_Limit
+00000501   SysCtlClockSet
+0000063d   main
+00000711   GPIOPadConfigSet
+000007d9   UARTInit
+00000881   __aeabi_memcpy
+00000881   __aeabi_memcpy4
+00000881   __aeabi_memcpy8
+00000881   memcpy
+0000091d   __TI_auto_init
+000009b1   UARTTask
+00000a31   UARTIntHandler
+00000b0d   KeyTask
+00000b75   IntEnable
+00000bd9   SPIInit
+00000c97   CntlInit
+00000c99   KeyInit
+00000cf1   SysCtlPeripheralEnable
+00000d49   GPIOPinConfigure
+00000d91   SPISendChar
+00000dd9   _c_int00
+00000e21   copy_in
+00000e65   UARTConfigSetExpClk
+00000ea9   UARTSend
+00000ee9   UART_Welcome
+00000f29   C$$EXIT
+00000f2d   abort
+00000f35   exit
+00000f69   Timer0IntHandler
+00000fa5   GetKey
+00000fd9   GPIODirModeSet
+00001009   UARTSendChar
+00001035   IsCntlKey
+0000105d   TimerConfigure
+00001085   UARTDisable
+000010a1   UARTGetBuffer
+000010bd   _args_main
+000010d5   UARTEnable
+000010e9   _register_unlock
+000010ef   _register_lock
+000010f7   _nop
+000010fd   GPIOPinTypeGPIOInput
+0000110f   GPIOPinTypeGPIOOutput
+00001121   GPIOPinTypeUART
+00001133   TimerLoadSet
+00001145   __TI_zero_init
+00001159   FPUEnable
+00001169   FPULazyStackingEnable
+00001179   TimerEnable
+00001187   __TI_decompress_none
+00001195   CPUcpsie
+000011a1   GPIOPinRead
+000011ab   GPIOPinWrite
+000011b5   IntMasterEnable
+000011bf   UARTCharPut
+000011c9   UARTFIFOEnable
+000011d3   UARTIntDisable
+000011dd   TimerIntEnable
+000011e5   UARTIntEnable
+000011ed   ResetISR
+000011f3   SysCtlDelay
+000011f9   UARTClockSourceSet
+000011ff   UARTFIFOLevelSet
+00001205   __TI_decompress_rle24
+0000120b   TimerIntClear
+00001210   menuStr
+00001564   __TI_Handler_Table_Base
+00001570   __TI_Handler_Table_Limit
+00001578   __TI_CINIT_Base
+00001588   __TI_CINIT_Limit
 2000010c   _lock
 20000110   _unlock
 20000114   _cleanup_ptr
@@ -337,4 +343,4 @@ ffffffff   binit
 UNDEFED    SHT$$INIT_ARRAY$$Base
 UNDEFED    SHT$$INIT_ARRAY$$Limit
 
-[86 symbols]
+[88 symbols]

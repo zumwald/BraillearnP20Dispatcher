@@ -58,6 +58,7 @@ int main(void) {
 	KeyInit();
 	CntlInit();
 	UARTInit();
+	SPIInit();
 
 	/*	Send welcome message	*/
 	UART_Welcome();

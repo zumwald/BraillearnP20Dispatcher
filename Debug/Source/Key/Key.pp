@@ -17,6 +17,7 @@ Source/Key/Key.obj: E:/StellarisWare/driverlib/uart.h
 Source/Key/Key.obj: E:/StellarisWorkspace/Braillearn/Source/Key/Key.h
 Source/Key/Key.obj: E:/StellarisWorkspace/Braillearn/Source/Control/Control.h
 Source/Key/Key.obj: E:/StellarisWorkspace/Braillearn/Source/UART/UART.h
+Source/Key/Key.obj: E:/StellarisWorkspace/Braillearn/Source/SPI/SPI.h
 
 ../Source/Key/Key.c: 
 E:/StellarisWorkspace/Braillearn/includes.h: 
@@ -35,3 +36,4 @@ E:/StellarisWare/driverlib/uart.h:
 E:/StellarisWorkspace/Braillearn/Source/Key/Key.h: 
 E:/StellarisWorkspace/Braillearn/Source/Control/Control.h: 
 E:/StellarisWorkspace/Braillearn/Source/UART/UART.h: 
+E:/StellarisWorkspace/Braillearn/Source/SPI/SPI.h: 

@@ -88,6 +88,7 @@ typedef signed long     INT32S;
 #include "Key.h"
 #include "Control.h"
 #include "UART.h"
+#include "SPI.h"
 /************************************************************************/
 
 #endif
