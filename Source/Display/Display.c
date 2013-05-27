@@ -60,11 +60,11 @@ void DisplayTask(void){
 #endif
 	UARTGetBuffer((INT8U *)&buffer);
 	if (buffer[0]){
-		GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,buffer[0]);
+		GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,~buffer[0]);
 	}else{
 		/*	No Update to display	*/
 		//GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,buffer[0]);
-		GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,~buffer[0]);
+		//GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,~buffer[0]);
 	}
 #if defined(DB_DISPLAY) && defined(DB_PORT)
 	GPIOPinWrite(DB_PORT, DB_DISPLAY, DB_DISPLAY);
