@@ -54,6 +54,7 @@ extern unsigned long __STACK_TOP;
 //*****************************************************************************
 extern void UARTIntHandler(void);
 extern void Timer0IntHandler(void);
+extern void SPIIntHandler(void);
 
 //*****************************************************************************
 //
@@ -145,7 +146,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // UART4 Rx and Tx
     IntDefaultHandler,                      // UART5 Rx and Tx
     IntDefaultHandler,                      // UART6 Rx and Tx
-    IntDefaultHandler,                      // UART7 Rx and Tx
+    SPIIntHandler,                      // UART7 Rx and Tx
     0,                                      // Reserved
     0,                                      // Reserved
     0,                                      // Reserved

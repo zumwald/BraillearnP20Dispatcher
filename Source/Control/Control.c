@@ -53,9 +53,9 @@ void CntlTask(void) {
 	INT8U key, cntlFlag;
 	INT16U rawKey;
 	static INT8U readBuffer[BUFFERSIZE];
-	static INT8U sendBuffer[BUFFERSIZE];
-	INT8U* rBptr = readBuffer;
-	INT8U* sBptr = sendBuffer;
+	//static INT8U sendBuffer[BUFFERSIZE];
+	//INT8U* rBptr = readBuffer;
+	//INT8U* sBptr = sendBuffer;
 
 	key = GetKey(&cntlFlag, &rawKey);
 
@@ -63,7 +63,7 @@ void CntlTask(void) {
 		UARTSend("Key: ", (INT32U) 5);
 		UARTSend(&key, (INT32U) 1);
 		UARTSend("\r\n",(INT32U)2);
-		(void)SPISendChar(key,(INT8U)0x00);
+		(void)SPISendChar((INT8U)rawKey,(INT8U)0x00);
 	} else {
 	}
 
