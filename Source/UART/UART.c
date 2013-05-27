@@ -94,6 +94,7 @@ void UARTIntHandler(void) {
 		if (indexR == BUFLEN) {
 			indexR = 0;
 		}else{}
+		bFlag = TRUE;
 	}
 }
 
@@ -163,7 +164,9 @@ void UARTInit(void) {
 
 	/*	Enable FIFOs	*/
 	UARTFIFOEnable(UART2_BASE);
-	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX4_8, UART_FIFO_RX4_8);
+	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX1_8, UART_FIFO_RX1_8);
+
+	UARTEnable(UART2_BASE);
 
 	// Enable the UART interrupt.
 	IntEnable(INT_UART2);
@@ -191,7 +194,7 @@ void UARTTask(void) {
 	/*	if data available, parse it	*/
 	if (bFlag) {
 		/*	Disable interrupts to Mutex Rx buffer access	*/
-		UARTIntDisable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+		UARTIntDisable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
 		for (j = 0; j < indexR; j++) {
 			SyncBuffer[j] = RxBuffer[j];
@@ -200,7 +203,7 @@ void UARTTask(void) {
 		SyncBuffer[j] = 0x00;
 
 		/*	Re-enable interrupts before returning to kernel	*/
-		UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+		UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
 		/*	Send contents of TxBuffer	*/
 		UARTSend(TxBuffer,indexT);

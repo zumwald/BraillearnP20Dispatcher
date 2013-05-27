@@ -32,16 +32,12 @@ int main(void) {
 					| SYSCTL_OSC_MAIN);
 
 	/*	Initialize Peripherals	*/
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-
-	/*	Initialize GPIO States	*/
-	GPIOPinTypeGPIOOutputOD(GPIO_PORTB_BASE,GPIO_ALL);
-	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE,GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 
 	/*	Initialize Bit Toggles	*/
-	//GPIOPinTypeGPIOOutput(DB_PORT,DB_KEY|DB_UART|DB_SLICE);
-	//GPIOPinWrite(DB_PORT,DB_KEY|DB_UART|DB_SLICE,DB_KEY|DB_UART|DB_SLICE);
+	GPIOPinTypeGPIOOutput(DB_PORT,DB_DISPLAY|DB_UART|DB_SLICE);
+	GPIOPinWrite(DB_PORT,DB_DISPLAY|DB_UART|DB_SLICE,DB_DISPLAY|DB_UART|DB_SLICE);
 
 	/*	Initialize Timer Module	*/
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER);
@@ -60,7 +56,7 @@ int main(void) {
 	/*	Start Timeslice timer	*/
 	TimerEnable(TIMER0_BASE, TIMER_A);
 
-	while (1) {
+	while(1) {
 #if defined(DB_SLICE) && defined(DB_PORT)
     GPIOPinWrite(DB_PORT, DB_SLICE, 0);
 #endif
@@ -81,11 +77,12 @@ void Timer0IntHandler(void) {
 	TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 	// Read the current state of the GPIO pin and
 	// write back the opposite state
+	/*
 	if (GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_2)) {
 		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
 	} else {
 		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
-	}
+	}*/
 	/*	Signal tickFlag	*/
 	tickFlag = 0x01;
 }

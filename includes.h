@@ -21,6 +21,8 @@ typedef signed long     INT32S;
 /*************************************************************************
 * General Defined Constants 
 *************************************************************************/
+#define DEBUG
+
 #define FALSE    0
 #define TRUE     1
 
@@ -71,9 +73,9 @@ typedef signed long     INT32S;
 #define DB_PORT			GPIO_PORTF_BASE
 #define DB_SLICE        GPIO_PIN_1
 #define DB_UART         GPIO_PIN_3
-#define DB_UI			GPIO_PIN_2
+#define DB_DISPLAY		GPIO_PIN_2
 
-#define BAUD			115200
+#define BAUD			9600
 #define BUFLEN			8
 
 /*************************************************************************
