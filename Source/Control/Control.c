@@ -15,12 +15,30 @@
 typedef enum {
 	MENU, NOTES, READ, LEARN, CHAT
 } CNTLSTATES;
+
 typedef enum {
 	nNOTES, nNEW, nOLD, nSELECT
 } NOTESTATES;
+
 typedef enum {
 	rREAD, rSELECT
 } READSTATES;
+
+typedef enum {
+	fREAD, fNOTES, fLEARN, fUNUSED
+} FILESTATES;
+
+#define FILEBLOCKSIZE 	1024
+#define	NUMFILES		50
+
+typedef INT8U FILESTRUCT[FILEBLOCKSIZE];
+
+typedef struct {
+	FILESTATES 	state = fUNUSED;
+	INT8U 		name[16] = "               ";
+	FILESTRUCT	*ptr = 0x00;
+}	FILETABLESTRUCT;
+
 #define 	BUFFERSIZE	16
 
 /********************************************************************
@@ -36,6 +54,9 @@ static NOTESTATES noteState = nSELECT;
 static READSTATES readState = rSELECT;
 static INT32U sliceCnt = 0;
 static INT8U bMenuDisplayed = FALSE;
+
+/*	file system resources	*/
+FILETABLESTRUCT fileLookupTable[NUMFILES];
 
 /********************************************************************
  * CntlInit() - Initialization routine for the control module.
