@@ -58,7 +58,9 @@ typedef signed long     INT32S;
 #define BIT5            0x20
 #define BIT6            0x40
 #define BIT7            0x80
-#define GPIO_ALL 		0x000000ff
+#define GPIO_ALL 		0xff
+#define	GPIO_LNIB		0x0f
+#define GPIO_HNIB		0xf0
 
 #define CR				0x0A
 #define LF				0x0D
@@ -66,18 +68,14 @@ typedef signed long     INT32S;
 #define CRYSTAL_16MHZ (INT32U)16000000
 
 #define SLICE_PER 10
-#define DB_PORT			GPIO_PORTE_BASE
-#define DB_SLICE        BIT3
-#define DB_UART         BIT4
-#define DB_KEY          BIT5
+#define DB_PORT			GPIO_PORTF_BASE
+#define DB_SLICE        GPIO_PIN_1
+#define DB_UART         GPIO_PIN_3
+#define DB_UI			GPIO_PIN_2
 
-#define KEY_SPACE 	0x00008000
-#define KEY_LEFT  	0x00002000
-#define KEY_RIGHT 	0x00004000
-#define KEYBITS		0xFF
-#define NAVBITS		(BIT5|BIT6|BIT7)
-#define KEYPORT_BASE	GPIO_PORTB_BASE
-#define NAVPORT_BASE	GPIO_PORTC_BASE
+#define BAUD			115200
+#define BUFLEN			8
+
 /*************************************************************************
 * System Header Files 
 *************************************************************************/
@@ -85,10 +83,8 @@ typedef signed long     INT32S;
 /*************************************************************************
 * Module Header Files or Declarations 
 *************************************************************************/
-#include "Key.h"
-#include "Control.h"
 #include "UART.h"
-#include "SPI.h"
+#include "Display.h"
 /************************************************************************/
 
 #endif

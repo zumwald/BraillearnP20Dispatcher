@@ -8,9 +8,7 @@ CG_TOOL_ROOT := E:/ti/ccsv5/tools/compiler/arm_5.0.1
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./Source/Control/Control.obj" \
-"./Source/Key/Key.obj" \
-"./Source/SPI/SPI.obj" \
+"./Source/Display/Display.obj" \
 "./Source/UART/UART.obj" \
 "./startup_ccs.obj" \
 "./main.obj" \
@@ -27,14 +25,10 @@ RMDIR := RMDIR /S/Q
 -include sources.mk
 -include subdir_vars.mk
 -include Source/UART/subdir_vars.mk
--include Source/SPI/subdir_vars.mk
--include Source/Key/subdir_vars.mk
--include Source/Control/subdir_vars.mk
+-include Source/Display/subdir_vars.mk
 -include subdir_rules.mk
 -include Source/UART/subdir_rules.mk
--include Source/SPI/subdir_rules.mk
--include Source/Key/subdir_rules.mk
--include Source/Control/subdir_rules.mk
+-include Source/Display/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -123,27 +117,27 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: Braillearn.out
+all: Braillearn_P20Dispatcher.out
 
 # Tool invocations
-Braillearn.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+Braillearn_P20Dispatcher.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"E:/ti/ccsv5/tools/compiler/arm_5.0.1/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_LM4F120H5QR --define=TARGET_IS_BLIZZARD_RA1 --diag_warning=225 --display_error_number --gen_func_subsections=on --ual -z --stack_size=256 -m"uart_echo_ccs.map" --heap_size=0 -i"E:/ti/ccsv5/tools/compiler/arm_5.0.1/lib" -i"E:/ti/ccsv5/tools/compiler/arm_5.0.1/include" --reread_libs --warn_sections --display_error_number --rom_model -o "Braillearn.out" $(ORDERED_OBJS)
+	"E:/ti/ccsv5/tools/compiler/arm_5.0.1/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 -g --gcc --define=ccs="ccs" --define=PART_LM4F120H5QR --define=TARGET_IS_BLIZZARD_RA1 --diag_warning=225 --display_error_number --gen_func_subsections=on --ual -z --stack_size=256 -m"uart_echo_ccs.map" --heap_size=0 -i"E:/ti/ccsv5/tools/compiler/arm_5.0.1/lib" -i"E:/ti/ccsv5/tools/compiler/arm_5.0.1/include" --reread_libs --warn_sections --display_error_number --rom_model -o "Braillearn_P20Dispatcher.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
 
 # Other Targets
 clean:
-	-$(RM) $(TMS470_EXECUTABLE_OUTPUTS__QUOTED) "Braillearn.out"
-	-$(RM) "main.pp" "startup_ccs.pp" "Source\UART\UART.pp" "Source\SPI\SPI.pp" "Source\Key\Key.pp" "Source\Control\Control.pp" 
-	-$(RM) "main.obj" "startup_ccs.obj" "Source\UART\UART.obj" "Source\SPI\SPI.obj" "Source\Key\Key.obj" "Source\Control\Control.obj" 
+	-$(RM) $(TMS470_EXECUTABLE_OUTPUTS__QUOTED) "Braillearn_P20Dispatcher.out"
+	-$(RM) "main.pp" "startup_ccs.pp" "Source\UART\UART.pp" "Source\Display\Display.pp" 
+	-$(RM) "main.obj" "startup_ccs.obj" "Source\UART\UART.obj" "Source\Display\Display.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
 post-build:
-	-"E:/ti/ccsv5/utils/tiobj2bin/tiobj2bin" "Braillearn.out" "Braillearn.bin" "E:/ti/ccsv5/tools/compiler/arm_5.0.1/bin/ofd470" "E:/ti/ccsv5/tools/compiler/arm_5.0.1/bin/hex470" "E:/ti/ccsv5/utils/tiobj2bin/mkhex4bin"
+	-"E:/ti/ccsv5/utils/tiobj2bin/tiobj2bin" "Braillearn_P20Dispatcher.out" "Braillearn_P20Dispatcher.bin" "E:/ti/ccsv5/tools/compiler/arm_5.0.1/bin/ofd470" "E:/ti/ccsv5/tools/compiler/arm_5.0.1/bin/hex470" "E:/ti/ccsv5/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents

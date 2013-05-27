@@ -21,22 +21,22 @@ extern void UARTSendChar(INT8U ch);
 //*****************************************************************************
 // The UART interrupt handler.	- local echo
 //*****************************************************************************
-void UARTIntHandler(void);
+extern void UARTIntHandler(void);
 
 /********************************************************************
 * UARTInit() - Initialization routine for the UART module.
 ********************************************************************/
-void UARTInit(void);
+extern void UARTInit(void);
 
 /********************************************************************
 * UARTGetBuffer() - returns 8Byte Rx buffer contents null terminated.
 ********************************************************************/
-void UARTGetBuffer(INT8U *buffer);
+extern void UARTGetBuffer(INT8U *buffer);
 
 //*****************************************************************************
 // Send the welcome string to the UART.	-	Public, BLOCKING 30mS
 //*****************************************************************************
-void UART_Welcome(void);
+extern void UART_Welcome(void);
 
 /********************************************************************
 * KeyTask() - The main UART send/receive task

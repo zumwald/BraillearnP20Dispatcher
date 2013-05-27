@@ -2,7 +2,7 @@
  * UART.c
  *	Modifed ~~ See Below.
  *  Created on: May 22, 2013
- *      Author: zumwald
+ *      Author: Dan Zumwalt
  */
 
 //*****************************************************************************
@@ -37,26 +37,16 @@
 /********************************************************************
  * Module Defines
  ********************************************************************/
-#define BAUD	115200
-#define BUFLEN	15
 
 /********************************************************************
  * Public Resources
  ********************************************************************/
 void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
+void UARTTask(void);
 
 /********************************************************************
  * Private Resources
  ********************************************************************/
-const INT8U menuStr[36][10] = { "\r _       ", "        _ ", "_ _      _",
-		"_____     ", "     _____", "  _   _ \r\n", "\r| |      ", "       (_)",
-		" | |    | ", " ____|   /", "\\   |  __ ", "\\| \\ | |\r\n",
-		"\r| |__  _ ", "__ __ _ _|", " | |    | ", "|__     / ", " \\  | |__)",
-		" |  \\| |\r\n", "\r| '_ \\| '", "__/ _` | |", " | |    | ",
-		" __|   / /", "\\ \\ |  _  ", "/| . ` |\r\n", "\r| |_) | |",
-		" | (_| | |", " | |____| ", "|____ / __", "__ \\| | \\ ",
-		"\\| |\\  |\r\n", "\r|_.__/|_|", "  \\__,_|_|", "_|______|_",
-		"_____/_/  ", "  \\_\\_|  \\", "_\\_| \\_|\r\n" };
 static INT8U RxBuffer[BUFLEN];
 static INT8U SyncBuffer[BUFLEN + 1];
 static INT8U indexR;
@@ -77,7 +67,9 @@ void UARTGetBuffer(INT8U *outbuf) {
 	while (*ptr != 0x00) {
 		*(outbuf++) = *(ptr++);
 	}
+	*outbuf = 0x00;
 }
+
 //*****************************************************************************
 //
 // The UART interrupt handler.
@@ -88,16 +80,16 @@ void UARTIntHandler(void) {
 	INT8U ch;
 
 	// Get the interrupt status.
-	ulStatus = ROM_UARTIntStatus (UART0_BASE, true);
+	ulStatus = ROM_UARTIntStatus (UART2_BASE, true);
 
 	// Clear the asserted interrupts.
-	ROM_UARTIntClear (UART0_BASE, ulStatus);
+	ROM_UARTIntClear (UART2_BASE, ulStatus);
 
 	// Loop while there are characters in the receive FIFO.
-	while (ROM_UARTCharsAvail (UART0_BASE)) {
+	while (ROM_UARTCharsAvail (UART2_BASE)) {
 		// Read the next character from the UART and write it back to the UART.
-		ch = ROM_UARTCharGetNonBlocking (UART0_BASE);
-		ROM_UARTCharPutNonBlocking (UART0_BASE, ch);
+		ch = ROM_UARTCharGetNonBlocking (UART2_BASE);
+		ROM_UARTCharPutNonBlocking (UART2_BASE, ch);
 		RxBuffer[indexR++] = ch;
 		if (indexR == BUFLEN) {
 			indexR = 0;
@@ -121,7 +113,7 @@ void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount) {
 		//
 		// Write the next character to the UART.
 		//
-		ROM_UARTCharPutNonBlocking (UART0_BASE, *pucBuffer++);
+		ROM_UARTCharPutNonBlocking (UART2_BASE, *pucBuffer++);
 	}
 #if defined(DB_UART) && defined(DB_PORT)
 	GPIOPinWrite(DB_PORT, DB_UART, DB_UART);
@@ -154,28 +146,28 @@ void UARTInit(void) {
 	FPULazyStackingEnable();
 
 	// Enable the peripherals used by this example.
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART2);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
 
 	// Set GPIO A0 and A1 as UART pins.
-	GPIOPinConfigure(GPIO_PA0_U0RX);
-	GPIOPinConfigure(GPIO_PA1_U0TX);
-	GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+	GPIOPinConfigure(GPIO_PD6_U2RX);
+	GPIOPinConfigure(GPIO_PD7_U2TX);
+	GPIOPinTypeUART(GPIO_PORTD_BASE, GPIO_PIN_6 | GPIO_PIN_7);
 
 	//	Set UART Clock source as 16MHZ crystal
-	UARTClockSourceSet(UART0_BASE, UART_CLOCK_PIOSC);
+	UARTClockSourceSet(UART2_BASE, UART_CLOCK_PIOSC);
 
 	// Configure the UART for 115,200, 8-N-1 operation.
-	UARTConfigSetExpClk(UART0_BASE, CRYSTAL_16MHZ, (INT32U) BAUD,
+	UARTConfigSetExpClk(UART2_BASE, CRYSTAL_16MHZ, (INT32U) BAUD,
 			(UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
 	/*	Enable FIFOs	*/
-	UARTFIFOEnable(UART0_BASE);
-	UARTFIFOLevelSet(UART0_BASE, UART_FIFO_TX4_8, UART_FIFO_RX4_8);
+	UARTFIFOEnable(UART2_BASE);
+	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX4_8, UART_FIFO_RX4_8);
 
 	// Enable the UART interrupt.
-	IntEnable(INT_UART0);
-	UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+	IntEnable(INT_UART2);
+	UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
 	/*	Variable initialization 	*/
 	SyncBuffer[0] = 0x00;
@@ -184,25 +176,6 @@ void UARTInit(void) {
 	TxBuffer[0] = 0x00;
 	indexT = 0;
 	fTxFull = FALSE;
-}
-
-//*****************************************************************************
-// Send the welcome string to the UART.	-	Public, BLOCKING 30mS
-//*****************************************************************************
-void UART_Welcome(void) {
-
-	int i, j;
-#if defined(DB_UART) && defined(DB_PORT)
-	GPIOPinWrite(DB_PORT, DB_UART, 0);
-#endif
-	for (i = 0; i < 36; i++) {
-		for (j = 0; j < 10; j++) {
-			UARTCharPut(UART0_BASE, (INT8U) menuStr[i][j]);
-		}
-	}
-#if defined(DB_UART) && defined(DB_PORT)
-	GPIOPinWrite(DB_PORT, DB_UART, DB_UART);
-#endif
 }
 
 /********************************************************************
@@ -226,15 +199,16 @@ void UARTTask(void) {
 		/*	Add null terminator	*/
 		SyncBuffer[j] = 0x00;
 
+		/*	Re-enable interrupts before returning to kernel	*/
+		UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
+
 		/*	Send contents of TxBuffer	*/
 		UARTSend(TxBuffer,indexT);
 
 		//TODO Add parsing logic for commands, data transfer, etc.
-
-		/*	Re-enable interrupts before returning to kernel	*/
-		UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
 	} else {
 	}
+	indexR = 0;
 #if defined(DB_UART) && defined(DB_PORT)
 	GPIOPinWrite(DB_PORT, DB_UART, DB_UART);
 #endif

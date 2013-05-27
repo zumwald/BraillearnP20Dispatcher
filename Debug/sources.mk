@@ -97,7 +97,5 @@ S64_DEPS__QUOTED :=
 SUBDIRS := \
 . \
 Source/UART \
-Source/SPI \
-Source/Key \
-Source/Control \
+Source/Display \
 
