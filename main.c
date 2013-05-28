@@ -75,7 +75,7 @@ int main(void) {
 #if defined(DB_SLICE) && defined(DB_PORT)
     GPIOPinWrite(DB_PORT, DB_SLICE, DB_SLICE);
 #endif
-    if(keyOn == 3){
+    if(keyOn >= 3){
 		KeyTask();
 		keyOn = 0x00;
     }else{}

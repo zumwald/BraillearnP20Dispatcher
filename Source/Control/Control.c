@@ -38,8 +38,8 @@ static READSTATES readState;
 static INT32U sliceCnt;
 static INT8U bMenuDisplayed;
 
-static INT8U displayBuffer[DISPLAYLEN];
-static INT8U displayIndex;
+//static INT8U displayBuffer[DISPLAYLEN];
+//static INT8U displayIndex;
 
 static INT8U chatRxBuffer[UARTBUFFERSIZE], chatTxBuffer[UARTBUFFERSIZE];
 static INT8U chatRxIndex, chatTxIndex;
@@ -60,7 +60,7 @@ void InitTmpVars(void) {
 
 	sliceCnt = 0;
 	bMenuDisplayed = FALSE;
-	displayIndex = 0;
+	//displayIndex = 0;
 	chatRxIndex = 0;
 	chatTxIndex = 0;
 	tmpFile.state = fUNUSED;
@@ -72,16 +72,15 @@ void InitTmpVars(void) {
  * FindNextFile() - returns true if success, false if no files exist.
  * 					next = TRUE, look forward. next = FALSE, look back.
  ********************************************************************/
-INT8U FindNextFile(FILETABLESTRUCT *current, INT8U next) {
+INT8U FindNextFile(FILETABLESTRUCT *current, INT8U next, FILESTATES fStates) {
 
 	INT16S i;
 	INT8U curindex = current->tableIndex;
-	FILESTATES fState = current->state;
 
 	if (next) {
 		//	curindex + 1 to end
 		for (i = curindex + 1; i < NUMFILES; i++) {
-			if (fileLookupTable[i].state & fState) {
+			if (fileLookupTable[i].state & fStates) {
 				*current = fileLookupTable[i];
 				return (INT8U) TRUE;
 			} else {
@@ -89,7 +88,7 @@ INT8U FindNextFile(FILETABLESTRUCT *current, INT8U next) {
 		}
 		//	beginning to curindex - 1
 		for (i = 0; i < curindex + 1; i++) {
-			if (fileLookupTable[i].state & fState) {
+			if (fileLookupTable[i].state & fStates) {
 				*current = fileLookupTable[i];
 				return (INT8U) TRUE;
 			} else {
@@ -99,7 +98,7 @@ INT8U FindNextFile(FILETABLESTRUCT *current, INT8U next) {
 	} else {
 		//	curindex to beginning
 		for (i = curindex; i >= 0; i--) {
-			if (fileLookupTable[i].state & fState) {
+			if (fileLookupTable[i].state & fStates) {
 				*current = fileLookupTable[i];
 				return (INT8U) TRUE;
 			} else {
@@ -107,7 +106,7 @@ INT8U FindNextFile(FILETABLESTRUCT *current, INT8U next) {
 		}
 		//	end to curindex + 1
 		for (i = NUMFILES; i > curindex; i--) {
-			if (fileLookupTable[i].state & fState) {
+			if (fileLookupTable[i].state & fStates) {
 				*current = fileLookupTable[i];
 				return (INT8U) TRUE;
 			} else {
@@ -146,7 +145,7 @@ void CntlInit(void) {
 	sliceCnt = 0;
 	bMenuDisplayed = FALSE;
 
-	displayIndex = 0;
+	//displayIndex = 0;
 
 	chatRxIndex = 0;
 	chatTxIndex = 0;
@@ -386,19 +385,10 @@ void CntlTask(void) {
 						noteState = nSELECT;
 						break;
 					case '<':
-						//	if not uninitialized
-						if (tmpFile.state != fUNUSED) {
-							error = FindNextFile(&tmpFile, BACK);
-						} else {
-							error = FindNextFile(&tmpFile, BACK);
-						}
+							error = FindNextFile(&tmpFile, BACK, fNOTES);
 						break;
 					case '>':
-						if (tmpFile.state != fUNUSED) {
-							error = FindNextFile(&tmpFile, FORWARD);
-						} else {
-							error = FindNextFile(&tmpFile, FORWARD);
-						}
+							error = FindNextFile(&tmpFile, FORWARD, fNOTES);
 						break;
 					}
 					if (error == TRUE) {
@@ -408,7 +398,7 @@ void CntlTask(void) {
 						noteState = nSELECT;
 						break;
 					} else {
-						UARTSend(tmpFile.name, (INT32U) 16);
+						UARTSend(tmpFile.name, (INT32U) BUFFERLEN);
 						DisplayUpdate(tmpFile.name);
 					}
 				} else if ((key == ' ') || (key == '\r') || (key == '\n')) {
@@ -440,7 +430,7 @@ void CntlTask(void) {
 		} else {
 		}
 		/*	*	*	*	*	*	*	*/
-		/*		Read State			*/
+		/*		Read State			*/	//TODO Read state
 	case READ:
 		if (sliceCnt > ONESECOND) {
 			switch (readState) {
@@ -452,19 +442,11 @@ void CntlTask(void) {
 						progState = MENU;
 						InitTmpVars();
 						break;
-					case '<':
-						if (tmpFile.state == fUNUSED) {
-							error = FindNextFile(&tmpFile, BACK);
-						} else {
-							error = FindNextFile(&tmpFile, BACK);
-						}
+					case '<':	// can read any type of file.
+							error = FindNextFile(&tmpFile, BACK, (FILESTATES)(fNOTES|fLEARN|fREAD));
 						break;
 					case '>':
-						if (tmpFile.state == fUNUSED) {
-							error = FindNextFile(&tmpFile, FORWARD);
-						} else {
-							error = FindNextFile(&tmpFile, FORWARD);
-						}
+							error = FindNextFile(&tmpFile, FORWARD, (FILESTATES)(fNOTES|fLEARN|fREAD));
 						break;
 					}
 					if (error == TRUE) {
@@ -474,7 +456,7 @@ void CntlTask(void) {
 						readState = rSELECT;
 						break;
 					} else {
-						UARTSend(tmpFile.name, (INT32U) 16);
+						UARTSend(tmpFile.name, (INT32U) BUFFERLEN);
 						DisplayUpdate(tmpFile.name);
 					}
 				} else {
@@ -514,17 +496,19 @@ void CntlTask(void) {
 		} else {
 		}
 		/*	*	*	*	*	*	*	*/
-		/*		Learn State			*/
+		/*		Learn State			*/	//TODO Learn state
 	case LEARN:
 		if (sliceCnt > ONESECOND) {
 			if (!cntlFlag && (key != 'M')) {
 				if (key != learnString[tmpFIndex]) {
 					DisplayBlinkMiss();
 				} else {
-					if (learnString[++tmpFIndex] == 0x00) {
+					tmpFIndex++;
+					if (learnString[tmpFIndex] == 0x00) {
 						progState = MENU;
 						InitTmpVars();
 					} else {
+						//	Shifted display to show next char as first
 					}
 				}
 			} else {
@@ -534,25 +518,53 @@ void CntlTask(void) {
 		} else {
 		}
 		UARTSend("\r\n", (INT32U) 2);
-		UARTSend(learnString + tmpFIndex, (INT32U) 8);
-		DisplayUpdate((INT8U *)(learnString + tmpFIndex));
+		UARTSend(learnString + tmpFIndex, (INT32U) DISPLAYLEN);
+		DisplayUpdate((INT8U *) (learnString + tmpFIndex));
 		break;
 		/*	*	*	*	*	*	*	*/
-		/*		Chat State			*/
+		/*		Chat State			*/	//TODO Chat state
 	case CHAT:
 		if (!cntlFlag && (key != 'M')) {
 			/*	Get Chat message	*/
 			UARTGetBuffer(chatRxBuffer);
-			if (*chatRxBuffer != 0x00) {
+			if (chatRxBuffer[chatRxIndex] != 0x00) {
+				//	New Message
+				chatRxIndex = 0;
 				DisplayUpdate(chatRxBuffer);
 			} else {
 			}
 
 			/*	Send user key	*/
 			if (!cntlFlag || key == ' ') {
-				UARTSendChar(key);
+				//UARTSendChar(key);
+				switch (key) {
+				case '\r':
+				case '\n':
+					UARTSend(chatTxBuffer, (INT32U) chatTxIndex);
+					chatTxIndex = 0;
+					break;
+				default:
+					chatTxBuffer[chatTxIndex++] = key;
+					if (chatTxIndex == UARTBUFFERSIZE) {
+						UARTSend(chatTxBuffer, (INT32U) chatTxIndex);
+						chatTxIndex = 0;
+					} else {
+					}
+				}
 			} else {
-				//	TODO respond to nav key
+				switch (key) {
+				case '<':
+					if (chatRxIndex > DISPLAYLEN) {
+						chatRxIndex -= DISPLAYLEN;
+					} else {
+					}
+					break;
+				case '>':
+					if (chatRxIndex < UARTBUFFERSIZE - DISPLAYLEN) {
+						chatRxIndex += DISPLAYLEN;
+					} else {
+					}
+				}
 			}
 		} else {
 			progState = MENU;
