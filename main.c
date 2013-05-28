@@ -59,6 +59,7 @@ int main(void) {
 	CntlInit();
 	UARTInit();
 	SPIInit();
+	DisplayInit();
 
 	/*	Send welcome message	*/
 	UART_Welcome();
@@ -80,6 +81,7 @@ int main(void) {
     }else{}
 		CntlTask();
 		UARTTask();
+		DisplayTask();
 		keyOn++;
 	}
 }

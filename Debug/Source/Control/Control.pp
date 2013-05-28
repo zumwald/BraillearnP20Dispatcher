@@ -14,10 +14,13 @@ Source/Control/Control.obj: E:/StellarisWare/driverlib/debug.h
 Source/Control/Control.obj: E:/StellarisWare/driverlib/fpu.h
 Source/Control/Control.obj: E:/StellarisWare/driverlib/rom.h
 Source/Control/Control.obj: E:/StellarisWare/driverlib/uart.h
+Source/Control/Control.obj: E:/StellarisWare/driverlib/flash.h
 Source/Control/Control.obj: E:/StellarisWorkspace/Braillearn/Source/Key/Key.h
 Source/Control/Control.obj: E:/StellarisWorkspace/Braillearn/Source/Control/Control.h
 Source/Control/Control.obj: E:/StellarisWorkspace/Braillearn/Source/UART/UART.h
 Source/Control/Control.obj: E:/StellarisWorkspace/Braillearn/Source/SPI/SPI.h
+Source/Control/Control.obj: E:/StellarisWorkspace/Braillearn/Source/FileIO/FileIO.h
+Source/Control/Control.obj: E:/StellarisWorkspace/Braillearn/Source/Display/Display.h
 
 ../Source/Control/Control.c: 
 E:/StellarisWorkspace/Braillearn/includes.h: 
@@ -33,7 +36,10 @@ E:/StellarisWare/driverlib/debug.h:
 E:/StellarisWare/driverlib/fpu.h: 
 E:/StellarisWare/driverlib/rom.h: 
 E:/StellarisWare/driverlib/uart.h: 
+E:/StellarisWare/driverlib/flash.h: 
 E:/StellarisWorkspace/Braillearn/Source/Key/Key.h: 
 E:/StellarisWorkspace/Braillearn/Source/Control/Control.h: 
 E:/StellarisWorkspace/Braillearn/Source/UART/UART.h: 
 E:/StellarisWorkspace/Braillearn/Source/SPI/SPI.h: 
+E:/StellarisWorkspace/Braillearn/Source/FileIO/FileIO.h: 
+E:/StellarisWorkspace/Braillearn/Source/Display/Display.h: 

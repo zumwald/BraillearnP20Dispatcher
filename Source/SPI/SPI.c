@@ -11,13 +11,13 @@
 /********************************************************************
  * Module Defines
  ********************************************************************/
-#define BAUD	9600
 
 /********************************************************************
  * Public Resources
  ********************************************************************/
 void SPIInit(void);
-INT8U SPISendChar(INT8U data, INT8U addr);
+INT8U SPISendChar(INT8U data);
+INT8U SPISendLine(INT8U *data);
 
 /********************************************************************
  * Private Resources
@@ -25,6 +25,7 @@ INT8U SPISendChar(INT8U data, INT8U addr);
 
 /********************************************************************
  * SPIInit() - SPI Initialization. Must run before calling SPI funcs
+ * 		- public
  ********************************************************************/
 void SPIInit(void) {
 	//
@@ -48,7 +49,7 @@ void SPIInit(void) {
 	UARTClockSourceSet(UART7_BASE, UART_CLOCK_PIOSC);
 
 	// Configure the UART for 115,200, 8-N-1 operation.
-	UARTConfigSetExpClk(UART7_BASE, CRYSTAL_16MHZ, (INT32U) BAUD,
+	UARTConfigSetExpClk(UART7_BASE, CRYSTAL_16MHZ, (INT32U) SPIBAUD,
 			(UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
 	UARTEnable(UART7_BASE);
@@ -56,7 +57,6 @@ void SPIInit(void) {
 	/*	Enable FIFOs	*/
 	//UARTFIFOEnable(UART7_BASE);
 	//UARTFIFOLevelSet(UART7_BASE, UART_FIFO_TX1_8, UART_FIFO_RX1_8);
-
 	// Enable the UART interrupt.
 	//IntEnable(INT_UART7);
 	//UARTIntEnable(UART7_BASE, UART_INT_RX | UART_INT_RT);
@@ -65,15 +65,16 @@ void SPIInit(void) {
 /********************************************************************
  * SPISendChar() - Sends char of data to specified address, returns
  * 				  TRUE if ack is received from slave, otherwise FALSE.
+ * 		- public
  ********************************************************************/
-INT8U SPISendChar(INT8U data, INT8U addr) {
+INT8U SPISendChar(INT8U data) {
 	INT16U timeout = 0;
 
 	ROM_UARTCharPutNonBlocking (UART7_BASE, data);
 
 	/*	wait for Rx ack	*/
 	while (!ROM_UARTCharsAvail (UART7_BASE)) {
-		if (timeout >= 1000) {
+		if (timeout >= TIMEOUTTICKS) {
 			return FALSE;
 		} else {
 			timeout++;
@@ -85,7 +86,32 @@ INT8U SPISendChar(INT8U data, INT8U addr) {
 		return FALSE;
 	}
 }
-/*******************************************************************/
+
+/********************************************************************
+ * SPISendLine() - Sends DISPLAYLEN characters to display, returns TRUE
+ *  				  if ack is received from follower, otherwise FALSE.
+ * 		- public		call to SPISendChar causes block for up to
+ * 						DISPLAYLEN * TIMEOUTTICK CPU ticks
+ ********************************************************************/
+INT8U SPISendLine(INT8U *data) {
+
+	INT8U i, result;
+
+	for (i = 0; i < DISPLAYLEN; i++) {
+
+		if (*data == 0x00) {
+			return (INT8U) TRUE;
+		} else {
+		}
+
+		result = SPISendChar(*data++);
+		if (!result) {
+			return (INT8U) FALSE;
+		} else {
+		}
+	}
+	return (INT8U) TRUE;
+}
 
 //*****************************************************************************
 //
@@ -109,3 +135,4 @@ void SPIIntHandler(void) {
 		ROM_UARTCharPutNonBlocking (UART7_BASE, ch);
 	}
 }
+/*******************************************************************/

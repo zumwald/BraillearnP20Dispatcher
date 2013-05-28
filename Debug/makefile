@@ -9,6 +9,8 @@ CG_TOOL_ROOT := E:/ti/ccsv5/tools/compiler/arm_5.0.1
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
 "./Source/Control/Control.obj" \
+"./Source/Display/Display.obj" \
+"./Source/FileIO/FileIO.obj" \
 "./Source/Key/Key.obj" \
 "./Source/SPI/SPI.obj" \
 "./Source/UART/UART.obj" \
@@ -29,11 +31,15 @@ RMDIR := RMDIR /S/Q
 -include Source/UART/subdir_vars.mk
 -include Source/SPI/subdir_vars.mk
 -include Source/Key/subdir_vars.mk
+-include Source/FileIO/subdir_vars.mk
+-include Source/Display/subdir_vars.mk
 -include Source/Control/subdir_vars.mk
 -include subdir_rules.mk
 -include Source/UART/subdir_rules.mk
 -include Source/SPI/subdir_rules.mk
 -include Source/Key/subdir_rules.mk
+-include Source/FileIO/subdir_rules.mk
+-include Source/Display/subdir_rules.mk
 -include Source/Control/subdir_rules.mk
 -include objects.mk
 
@@ -137,8 +143,8 @@ Braillearn.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 # Other Targets
 clean:
 	-$(RM) $(TMS470_EXECUTABLE_OUTPUTS__QUOTED) "Braillearn.out"
-	-$(RM) "main.pp" "startup_ccs.pp" "Source\UART\UART.pp" "Source\SPI\SPI.pp" "Source\Key\Key.pp" "Source\Control\Control.pp" 
-	-$(RM) "main.obj" "startup_ccs.obj" "Source\UART\UART.obj" "Source\SPI\SPI.obj" "Source\Key\Key.obj" "Source\Control\Control.obj" 
+	-$(RM) "main.pp" "startup_ccs.pp" "Source\UART\UART.pp" "Source\SPI\SPI.pp" "Source\Key\Key.pp" "Source\FileIO\FileIO.pp" "Source\Display\Display.pp" "Source\Control\Control.pp" 
+	-$(RM) "main.obj" "startup_ccs.obj" "Source\UART\UART.obj" "Source\SPI\SPI.obj" "Source\Key\Key.obj" "Source\FileIO\FileIO.obj" "Source\Display\Display.obj" "Source\Control\Control.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

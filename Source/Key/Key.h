@@ -10,6 +10,11 @@
 #define KEY_H_
 
 /********************************************************************
+* 	Braille - ASCII 	lookup table	-PUBLIC
+********************************************************************/
+extern const INT8U UBrailleLookup[256];
+
+/********************************************************************
 * GetKey() - Returns current value of the keypad buffer then clears 
 *            the buffer. Returns 0 if no key has been pressed.
 ********************************************************************/

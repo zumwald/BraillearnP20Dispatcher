@@ -99,5 +99,7 @@ SUBDIRS := \
 Source/UART \
 Source/SPI \
 Source/Key \
+Source/FileIO \
+Source/Display \
 Source/Control \
 

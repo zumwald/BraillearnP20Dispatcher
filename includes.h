@@ -46,6 +46,7 @@ typedef signed long     INT32S;
 #include "driverlib/pin_map.h"
 #include "driverlib/rom.h"
 #include "driverlib/uart.h"
+#include "driverlib/flash.h"
 
 /*************************************************************************
 * Project Constant and Macro Definitions
@@ -60,17 +61,29 @@ typedef signed long     INT32S;
 #define BIT7            0x80
 #define GPIO_ALL 		0x000000ff
 
-#define CR				0x0A
-#define LF				0x0D
-
-#define CRYSTAL_16MHZ (INT32U)16000000
-
-#define SLICE_PER 10
+#define SLICE_PERMS		10
 #define DB_PORT			GPIO_PORTE_BASE
 #define DB_SLICE        BIT3
 #define DB_UART         BIT4
 #define DB_KEY          BIT5
+#define DB_DISP			BIT6
 
+/*		UART		*/
+#define UARTBUFFERSIZE	16
+#define CRYSTAL_16MHZ (INT32U)16000000
+
+/*		SPI			*/
+#define SPIBAUD			9600
+#define TIMEOUTTICKS	10
+#define DISPLAYLEN		8
+
+/*		FILE IO		*/
+#define BUFFERLEN		16
+#define	NUMFILES		50
+#define FILEBASEADDR	0x00004000
+#define FILEBLOCKSIZE 	1024
+
+/*		KEY			*/
 #define KEY_SPACE 	0x00008000
 #define KEY_LEFT  	0x00002000
 #define KEY_RIGHT 	0x00004000
@@ -78,6 +91,18 @@ typedef signed long     INT32S;
 #define NAVBITS		(BIT5|BIT6|BIT7)
 #define KEYPORT_BASE	GPIO_PORTB_BASE
 #define NAVPORT_BASE	GPIO_PORTC_BASE
+
+/*		CONTROL		*/
+#define	ONESECOND		(1000/SLICE_PERMS)
+#define	TWOSECONDS		(2000/SLICE_PERMS)
+#define THREESECONDS	(3000/SLICE_PERMS)
+#define FOURSECONDS		(4000/SLICE_PERMS)
+#define FIVESECONDS		(5000/SLICE_PERMS)
+#define	SIXSECONDS		(6000/SLICE_PERMS)
+#define ONEMINUTE		(60000/SLICE_PERMS)
+#define FORWARD			TRUE
+#define BACK			FALSE
+
 /*************************************************************************
 * System Header Files 
 *************************************************************************/
@@ -89,6 +114,8 @@ typedef signed long     INT32S;
 #include "Control.h"
 #include "UART.h"
 #include "SPI.h"
+#include "FileIO.h"
+#include "Display.h"
 /************************************************************************/
 
 #endif

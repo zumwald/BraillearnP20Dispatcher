@@ -19,9 +19,15 @@ extern void SPIInit(void);
 
 /********************************************************************
 * SPISendChar() - Sends char of data to specified address, returns
-* 				  TRUE if ack is received from slave, otherwise FALSE.
+* 				  TRUE if ack is received from follower, otherwise FALSE.
 ********************************************************************/
-extern INT8U SPISendChar(INT8U data, INT8U addr);
+extern INT8U SPISendChar(INT8U data);
+
+/********************************************************************
+* SPISendLine() - Sends 8 characters to display, returns TRUE if ack
+* 				  is received from follower, otherwise FALSE.
+********************************************************************/
+extern INT8U SPISendLine(INT8U *data);
 
 
 #endif /* SPI_H_ */
