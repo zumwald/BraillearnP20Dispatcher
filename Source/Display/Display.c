@@ -61,6 +61,7 @@ void DisplayTask(void){
 	UARTGetBuffer((INT8U *)&buffer);
 	if (buffer[0]){
 		GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,~buffer[0]);
+		COMSend(buffer,BUFLEN);
 	}else{
 		/*	No Update to display	*/
 		//GPIOPinWrite(GPIO_PORTB_BASE,GPIO_ALL,buffer[0]);

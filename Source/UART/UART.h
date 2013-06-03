@@ -18,6 +18,12 @@ extern void UARTSend(const unsigned char *pucBuffer, unsigned long ulCount);
 //*****************************************************************************
 extern void UARTSendChar(INT8U ch);
 
+
+//*****************************************************************************
+// Send a char to the PC Com port.	-	Public, non-blocking
+//*****************************************************************************
+extern void COMSend(const INT8U *pucBuffer, INT32U ulCount);
+
 //*****************************************************************************
 // The UART interrupt handler.	- local echo
 //*****************************************************************************
