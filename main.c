@@ -36,8 +36,10 @@ int main(void) {
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 
 	/*	Initialize Bit Toggles	*/
+#if defined(DB_PORT)
 	GPIOPinTypeGPIOOutput(DB_PORT,DB_DISPLAY|DB_UART|DB_SLICE);
 	GPIOPinWrite(DB_PORT,DB_DISPLAY|DB_UART|DB_SLICE,DB_DISPLAY|DB_UART|DB_SLICE);
+#endif
 
 	/*	Initialize Timer Module	*/
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER);

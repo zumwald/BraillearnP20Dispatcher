@@ -70,10 +70,10 @@ typedef signed long     INT32S;
 #define CRYSTAL_16MHZ (INT32U)16000000
 
 #define SLICE_PER 10
-#define DB_PORT			GPIO_PORTF_BASE
-#define DB_SLICE        GPIO_PIN_1
-#define DB_UART         GPIO_PIN_3
-#define DB_DISPLAY		GPIO_PIN_2
+//#define DB_PORT			GPIO_PORTF_BASE
+//#define DB_SLICE        GPIO_PIN_1
+//#define DB_UART         GPIO_PIN_3
+//#define DB_DISPLAY		GPIO_PIN_2
 
 #define BAUD			9600
 #define BUFLEN			8
