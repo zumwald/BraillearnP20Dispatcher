@@ -21,7 +21,7 @@ typedef signed long     INT32S;
 /*************************************************************************
 * General Defined Constants 
 *************************************************************************/
-#define DEBUG
+//#define DEBUG
 
 #define FALSE    0
 #define TRUE     1

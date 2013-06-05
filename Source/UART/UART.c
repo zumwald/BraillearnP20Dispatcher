@@ -242,6 +242,7 @@ void UARTTask(void) {
 	} else {
 	}
 	indexR = 0;
+	bFlag = FALSE;
 #if defined(DB_UART) && defined(DB_PORT)
 	GPIOPinWrite(DB_PORT, DB_UART, DB_UART);
 #endif
