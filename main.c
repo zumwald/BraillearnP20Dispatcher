@@ -43,7 +43,7 @@ int main(void) {
 
 	/*	Initialize Timer Module	*/
 	TimerConfigure(TIMER0_BASE, TIMER_CFG_32_BIT_PER);
-	ulPeriod = 2500000; //ulPeriod = (SysCtlClockGet() / 10) / 2;
+	ulPeriod = 250000; //ulPeriod = (SysCtlClockGet() / 10) / 2;
 	TimerLoadSet(TIMER0_BASE, TIMER_A, ulPeriod - 1);
 	IntEnable(INT_TIMER0A);		// Enable timer interrupt
 	TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);

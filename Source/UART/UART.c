@@ -1,4 +1,4 @@
- /*
+/*
  * UART.c
  *	Modifed ~~ See Below.
  *  Created on: May 22, 2013
@@ -89,11 +89,12 @@ void UARTIntHandler(void) {
 	while (ROM_UARTCharsAvail (UART2_BASE)) {
 		// Read the next character from the UART and write it back to the UART.
 		ch = ROM_UARTCharGetNonBlocking (UART2_BASE);
-		ROM_UARTCharPutNonBlocking (UART2_BASE, ch);// echo
+		ROM_UARTCharPutNonBlocking (UART2_BASE, ch); // echo
 		RxBuffer[indexR++] = ch;
 		if (indexR == BUFLEN) {
 			indexR = 0;
-		}else{}
+		} else {
+		}
 		bFlag = TRUE;
 	}
 }
@@ -186,7 +187,7 @@ void UARTInit(void) {
 
 	/*	Enable FIFOs	*/
 	UARTFIFOEnable(UART2_BASE);
-	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX1_8, UART_FIFO_RX1_8);
+	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX1_8, UART_FIFO_RX4_8);
 
 	UARTFIFOEnable(UART0_BASE);
 	UARTFIFOLevelSet(UART0_BASE, UART_FIFO_TX4_8, UART_FIFO_RX4_8);
@@ -229,14 +230,17 @@ void UARTTask(void) {
 		for (j = 0; j < indexR; j++) {
 			SyncBuffer[j] = RxBuffer[j];
 		}
+		/*	Clear others	*/
+		for (j; j < BUFLEN; j++) {
+			SyncBuffer[j] = 0xff;
+		}
 		/*	Add null terminator	*/
-		SyncBuffer[j] = 0x00;
-
+		//SyncBuffer[j] = 0x00;
 		/*	Re-enable interrupts before returning to kernel	*/
 		UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
 		/*	Send contents of TxBuffer	*/
-		UARTSend(TxBuffer,indexT);
+		UARTSend(TxBuffer, indexT);
 
 		//TODO Add parsing logic for commands, data transfer, etc.
 	} else {
