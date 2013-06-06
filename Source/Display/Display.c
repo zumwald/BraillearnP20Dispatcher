@@ -75,21 +75,14 @@ void DisplayTask(void) {
 #endif
 	UARTGetBuffer((INT8U *) &buffer);
 
-	/*for (i = 0; i < BUFLEN; i++) {
-	 if (buffer[i] != 0x00) {
-	 switch (i) {
-	 case 0:*/
 	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_ALL, buffer[0]);
-	/*break;
-	 case 1:*/
+
 	GPIOPinWrite(GPIO_PORTE_BASE, BIT4 | BIT5, buffer[1] << 3);
 	GPIOPinWrite(GPIO_PORTA_BASE, GPIO_ALL & ~(BIT0 | BIT1), buffer[1]);
-	/*break;
-	 case 2:*/
+
 	GPIOPinWrite(GPIO_PORTD_BASE, GPIO_LNIB, buffer[2]);
 	GPIOPinWrite(GPIO_PORTC_BASE, GPIO_HNIB, buffer[2]);
-	/*break;
-	 case 3:*/
+
 	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_LNIB, buffer[3]);
 	GPIOPinWrite(GPIO_PORTF_BASE, GPIO_LNIB, buffer[3]>>4);
 

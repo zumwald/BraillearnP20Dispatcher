@@ -48,12 +48,12 @@ int main(void) {
 	IntEnable(INT_TIMER0A);		// Enable timer interrupt
 	TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 
-	/*	Enable Master Interrupts	*/
-	IntMasterEnable();
-
-	/*	Initialize Modules	*/
+/*	Initialize Modules	*/
 	UARTInit();
 	DisplayInit();
+
+	/*	Enable Master Interrupts	*/
+	IntMasterEnable();
 
 	/*	Start Timeslice timer	*/
 	TimerEnable(TIMER0_BASE, TIMER_A);
@@ -77,14 +77,6 @@ int main(void) {
 void Timer0IntHandler(void) {
 	// Clear the timer interrupt
 	TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
-	// Read the current state of the GPIO pin and
-	// write back the opposite state
-	/*
-	if (GPIOPinRead(GPIO_PORTF_BASE, GPIO_PIN_2)) {
-		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3, 0);
-	} else {
-		GPIOPinWrite(GPIO_PORTF_BASE, GPIO_PIN_1, GPIO_PIN_1);
-	}*/
 	/*	Signal tickFlag	*/
 	tickFlag = 0x01;
 }

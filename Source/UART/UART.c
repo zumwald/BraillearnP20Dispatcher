@@ -59,15 +59,12 @@ static INT8U indexT, fTxFull;
  ********************************************************************/
 void UARTGetBuffer(INT8U *outbuf) {
 
-	INT8U *ptr = SyncBuffer;
+	INT8U i;
 
-	/*	initialize outbuf to null	*/
-	*outbuf = 0x00;
 
-	while (*ptr != 0x00) {
-		*(outbuf++) = *(ptr++);
+	for (i=0; i<BUFLEN; i++){
+		*(outbuf)++ = SyncBuffer[i];
 	}
-	*outbuf = 0x00;
 }
 
 //*****************************************************************************
@@ -198,7 +195,7 @@ void UARTInit(void) {
 
 	// Enable the UART interrupt.
 	IntEnable(INT_UART2);
-	UARTIntEnable(UART2_BASE, UART_INT_RX /*| UART_INT_RT*/);
+	UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
 	//IntEnable(INT_UART0);
 	//UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
@@ -227,15 +224,13 @@ void UARTTask(void) {
 		/*	Disable interrupts to Mutex Rx buffer access	*/
 		UARTIntDisable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
-		for (j = 0; j < indexR; j++) {
-			SyncBuffer[j] = RxBuffer[j];
+		for (j = 0; j < BUFLEN; j++) {
+			if (j > indexR) {
+				SyncBuffer[j] = 0xff;
+			} else {
+				SyncBuffer[j] = RxBuffer[j];
+			}
 		}
-		/*	Clear others	*/
-		for (j; j < BUFLEN; j++) {
-			SyncBuffer[j] = 0xff;
-		}
-		/*	Add null terminator	*/
-		//SyncBuffer[j] = 0x00;
 		/*	Re-enable interrupts before returning to kernel	*/
 		UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
 
