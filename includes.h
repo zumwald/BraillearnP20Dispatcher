@@ -75,7 +75,7 @@ typedef signed long     INT32S;
 //#define DB_UART         GPIO_PIN_3
 //#define DB_DISPLAY		GPIO_PIN_2
 
-#define BAUD			9600
+#define BAUD			115200
 #define BUFLEN			8
 
 /*************************************************************************
