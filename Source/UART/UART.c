@@ -184,21 +184,17 @@ void UARTInit(void) {
 
 	/*	Enable FIFOs	*/
 	UARTFIFOEnable(UART2_BASE);
-	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX1_8, UART_FIFO_RX4_8);
+	UARTFIFOLevelSet(UART2_BASE, UART_FIFO_TX1_8, UART_FIFO_RX1_8);
 
 	UARTFIFOEnable(UART0_BASE);
 	UARTFIFOLevelSet(UART0_BASE, UART_FIFO_TX4_8, UART_FIFO_RX4_8);
 
 	UARTEnable(UART2_BASE);
-
 	UARTEnable(UART0_BASE);
 
 	// Enable the UART interrupt.
 	IntEnable(INT_UART2);
 	UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
-
-	//IntEnable(INT_UART0);
-	//UARTIntEnable(UART0_BASE, UART_INT_RX | UART_INT_RT);
 
 	/*	Variable initialization 	*/
 	SyncBuffer[0] = 0x00;
@@ -233,9 +229,6 @@ void UARTTask(void) {
 		}
 		/*	Re-enable interrupts before returning to kernel	*/
 		UARTIntEnable(UART2_BASE, UART_INT_RX | UART_INT_RT);
-
-		/*	Send contents of TxBuffer	*/
-		UARTSend(TxBuffer, indexT);
 
 		//TODO Add parsing logic for commands, data transfer, etc.
 	} else {
